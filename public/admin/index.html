@@ -5,15 +5,28 @@
 "use strict";
 const KEYS={data:"relato_admin_demo_v1",session:"relato_admin_demo_session"};
 const catalog=[
-["home","Inicio","Portada, títulos, botones y textos",["Hero principal","Soluciones resumidas","Servicios destacados","Resultados destacados","Sobre nosotros resumido","Blog destacado","Contacto"]],
-["soluciones","Soluciones","Públicos, preguntas y beneficios",["Aumento o cambio de trabajo","Consultores independientes","Alta dirección y líderes"]],
-["servicios","Servicios y planes","Cinco planes comerciales",["Auditoría Pro","Optimización 360","Gestión Plus","LinkedIn Elite","Taller Embajadores LinkedIn"]],
-["resultados","Resultados","Indicadores y evidencias",["Interacciones","+2.135 % impresiones","+24,1 % seguidores","Gráficos y evidencias"]],
-["nosotros","Sobre nosotros","Biografía y metodología",["Presentación de Rodrigo Barría","Enfoque periodístico","Metodología"]],
-["preguntas","Preguntas frecuentes","Preguntas y respuestas",["¿Relato Estratégico trabaja solo con ejecutivos?","¿En qué plataforma se especializa?","¿Cómo sé qué servicio necesito?","¿Los resultados publicados están garantizados?"]],
-["contacto","Contacto","Datos y canales",["WhatsApp","Correo electrónico","Agendamiento"]]
+["home","Inicio","Portada y secciones actuales",["Hero: Tu experiencia tiene valor","Soluciones según objetivo","Cuatro servicios","Resultados destacados","Rodrigo Barría","Noticias, tendencias y tips de LinkedIn","Contacto y agenda"]],
+["soluciones","Soluciones","Tres objetivos profesionales",["Mejorar oportunidades laborales","Conseguir oportunidades de negocio","Posicionarme como referente"]],
+["servicios","Servicios","Cuatro soluciones comerciales",["Perfil Estratégico","Presencia Constante","LinkedIn Elite","Taller Embajadores LinkedIn"]],
+["resultados","Resultados","Indicadores publicados y evidencias",["Interacciones","+2.135 % impresiones","+24,1 % seguidores","+57,4 % impresiones anuales","Gráficos y evidencias"]],
+["nosotros","Sobre nosotros","Biografía, fotografía y Método RUTA",["Rodrigo Barría, periodista senior y director editorial","Fotografía: /rodrigo.webp","Método RUTA: Revisar","Método RUTA: Unificar","Método RUTA: Traducir","Método RUTA: Activar"]],
+["preguntas","Preguntas frecuentes","Ocho preguntas actuales",["¿Para quién es la asesoría de marca personal en LinkedIn?","¿Puedo construir mi marca personal en LinkedIn por mi cuenta?","¿Cuánto cuestan los servicios?","¿Cuánto tiempo debo dedicar si trabajan conmigo?","¿Los contenidos serán genéricos? ¿Sonarán como yo?","¿En cuánto tiempo se ven resultados?","¿Garantizan más seguidores en LinkedIn?","¿Puedo conseguir empleo o negocios gracias a LinkedIn?"]],
+["contacto","Contacto","Datos y canales actuales",["WhatsApp: +56 9 5085 9889","Correo: contacto@relatoestrategico.cl","Agendamiento: Google Calendar","LinkedIn: Rodrigo Barría Reyes","Instagram: @relatoestrategico","Santiago, Chile · Atención remota y presencial"]]
 ];
-const defaults=()=>({pages:Object.fromEntries(catalog.map(([key,label,desc,items])=>[key,{label,desc,items:items.map((title,i)=>({id:key+"-"+i,title,subtitle:"",description:"",button:"",url:"",image:"",visible:true}))}])),posts:[{id:"post-demo-1",title:"Cómo construir liderazgo en LinkedIn",category:"Marca personal",excerpt:"Ideas para fortalecer tu posicionamiento profesional.",body:"Este es un artículo de demostración. Sustituye este contenido por el texto aprobado antes de publicar.",status:"borrador",image:"",date:"2026-10-15",slug:"como-construir-liderazgo-en-linkedin"}],media:[],settings:{siteName:"Relato Estratégico",email:"contacto@relatoestrategico.cl",whatsapp:"+56 9 5085 9889",calendar:"https://calendar.google.com/calendar/appointments/schedules/AcZssZ186hp2CwQKcji7Zs98n-clz2_ow6PdWIuN4vLuY6fVYNmcTU4H8k5Y1ENtn9rXyelsF96mjpEK",seoTitle:"Relato Estratégico | Posicionamiento en LinkedIn",seoDescription:"Estrategia de posicionamiento y contenidos en LinkedIn.",ogImage:""},users:[{name:"Administrador demo",email:"admin@demo.local",role:"Administrador",active:true}],activity:[]});
+const descriptions={
+"Perfil Estratégico":"Diagnóstico e informe; optimización completa del perfil con SEO; pilares de contenido y guía de uso de LinkedIn. Pago único.",
+"Presencia Constante":"Ocho contenidos mensuales, networking estratégico, gestión de interacciones y métricas. Ciclos renovables de tres meses.",
+"LinkedIn Elite":"Ghostwriting ejecutivo (12–16 contenidos), liderazgo de opinión, gestión reputacional, artículos, newsletter y medios. Cupos limitados.",
+"Taller Embajadores LinkedIn":"Capacitación para equipos: marca personal, optimización de perfiles, técnicas de crecimiento y ejercicios prácticos.",
+"Rodrigo Barría, periodista senior y director editorial":"Investiga, escribe y transforma trayectorias profesionales en relatos estratégicos para LinkedIn.",
+"Fotografía: /rodrigo.webp":"Fotografía existente en el repositorio y utilizada en Home y Sobre nosotros.",
+"Método RUTA: Revisar":"Diagnóstico de perfil, trayectoria, industria y objetivos.",
+"Método RUTA: Unificar":"Ordenar el relato y optimizar el perfil.",
+"Método RUTA: Traducir":"Convertir la experiencia en contenidos relevantes.",
+"Método RUTA: Activar":"Publicar, medir y ajustar la estrategia.",
+"+57,4 % impresiones anuales":"Indicador mostrado en la web. Validar evidencia y período antes de usarlo comercialmente."
+};
+const defaults=()=>({pages:Object.fromEntries(catalog.map(([key,label,desc,items])=>[key,{label,desc,items:items.map((title,i)=>({id:key+"-"+i,title,subtitle:"",description:descriptions[title]||"",button:"",url:title.startsWith("Agendamiento:")?"https://calendar.app.google/K8EH7bzSrJ4ApRGr5":"",image:title.startsWith("Fotografía:")?"/rodrigo.webp":"",visible:true}))}])),posts:[{id:"post-demo-1",title:"¿Por qué la consultoría de marca personal se ha convertido en una herramienta estratégica para profesionales y ejecutivos?",category:"Consultoría de marca personal",excerpt:"Posicionamiento profesional y liderazgo en LinkedIn.",body:"Contenido de referencia del sitio público. Consultar el artículo completo en la web.",status:"borrador",image:"",date:"2026-10-29",slug:"consultoria-marca-personal"}],media:[{id:"media-rodrigo",name:"Rodrigo Barría",data:"/rodrigo.webp"}],settings:{siteName:"Relato Estratégico",email:"contacto@relatoestrategico.cl",whatsapp:"+56 9 5085 9889",calendar:"https://calendar.app.google/K8EH7bzSrJ4ApRGr5",linkedin:"https://www.linkedin.com/in/rodrigobarriareyes/",instagram:"https://www.instagram.com/relatoestrategico/",location:"Santiago, Chile",seoTitle:"Relato Estratégico | Posicionamiento y estrategia en LinkedIn",seoDescription:"Estrategia editorial y posicionamiento en LinkedIn para profesionales y ejecutivos.",ogImage:""},users:[{name:"Administrador demo",email:"admin@demo.local",role:"Administrador",active:true}],activity:[]});
 let data;try{data=JSON.parse(localStorage.getItem(KEYS.data))||defaults()}catch{data=defaults()}
 let state={view:"dashboard",page:"home",edit:null,post:null,search:""};
 const el=id=>document.getElementById(id),esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])),uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);

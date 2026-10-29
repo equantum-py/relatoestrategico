@@ -447,6 +447,6 @@ body.inner-page{background:#f6f8fa}.inner-page .inner-intro{padding:160px max(5%
 /* Identidad corporativa: logo responsive en el encabezado */
 .nav .brand{display:inline-flex!important;align-items:center!important;flex:0 0 auto!important;line-height:1!important;min-width:0!important}
 .nav .brand picture{display:block;line-height:0}
-.nav .brand img{display:block;width:auto!important;height:52px!important;max-width:210px!important;object-fit:contain!important}
-@media(max-width:900px){.nav .brand img{height:42px!important;max-width:155px!important}.nav .brand{margin-right:auto!important}}
-@media(max-width:360px){.nav .brand img{height:36px!important;max-width:125px!important}}
+.nav .brand img{display:block;width:auto!important;height:60px!important;max-width:235px!important;object-fit:contain!important}
+@media(max-width:900px){.nav .brand img{height:54px!important;max-width:190px!important}.nav .brand{margin-right:auto!important}}
+@media(max-width:360px){.nav .brand img{height:45px!important;max-width:160px!important}}

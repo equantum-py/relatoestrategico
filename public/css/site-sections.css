@@ -450,3 +450,10 @@ body.inner-page{background:#f6f8fa}.inner-page .inner-intro{padding:160px max(5%
 .nav .brand img{display:block;width:auto!important;height:60px!important;max-width:235px!important;object-fit:contain!important}
 @media(max-width:900px){.nav .brand img{height:54px!important;max-width:190px!important}.nav .brand{margin-right:auto!important}}
 @media(max-width:360px){.nav .brand img{height:45px!important;max-width:160px!important}}
+
+/* Evidencias originales: Inicio, desktop y mobile */
+.home-results-evidence{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin:28px 0 32px}
+.home-results-evidence figure{margin:0;min-width:0;background:#fff;border-radius:10px;overflow:hidden;padding:12px;color:#172c3d}
+.home-results-evidence img{display:block;width:100%;height:auto;max-height:340px;object-fit:contain;object-position:center;background:#fff}
+.home-results-evidence figcaption{font-size:13px;line-height:1.45;padding:12px 4px 3px;color:#334657}
+@media(max-width:700px){.home-results-evidence{grid-template-columns:1fr;gap:14px;margin:22px 0}.home-results-evidence figure{padding:8px}.home-results-evidence img{max-height:none}.home-results-evidence figcaption{font-size:12px;padding:10px 5px 4px}}

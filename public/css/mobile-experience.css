@@ -1,0 +1,59 @@
+/* Relato Estratégico — optimización mobile progresiva. Desktop sin cambios. */
+@media(max-width:700px){
+html{scroll-padding-top:88px}
+body{overflow-x:clip}
+.section,.inner-intro,.inner-cta{scroll-margin-top:88px}
+.section .section-inner{width:calc(100% - 36px);max-width:100%;margin-inline:auto}
+.section{padding-block:38px}
+.section h2,.inner-intro h1{overflow-wrap:normal;hyphens:none;line-height:1.14}
+.nav{box-sizing:border-box;max-width:calc(100% - 20px);width:calc(100% - 20px);padding:10px 14px!important;min-height:64px;gap:8px}
+.nav .brand img{max-width:108px!important;height:auto!important;object-fit:contain}
+.nav .mobile-menu summary{min-height:44px;min-width:74px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.nav .mobile-links a{display:flex;align-items:center;min-height:44px;padding:10px 12px;box-sizing:border-box}
+.nav .mobile-links{max-height:min(65dvh,490px);overflow-y:auto;overscroll-behavior:contain}
+.nav .button{display:none!important}
+.hero .intro{padding-inline:18px!important}
+.hero .intro h1{font-size:clamp(32px,8.5vw,43px)!important;line-height:1.09!important}
+.hero .intro .hero-description{font-size:13px!important;line-height:1.5!important}
+.hero .actions{display:flex;flex-wrap:wrap;gap:9px}
+.hero .actions .button{min-height:44px;box-sizing:border-box}
+.hero .v3-hero-features{display:none!important}
+.pathways-section .pathways-heading{display:block!important;margin-bottom:17px!important}
+.pathways-section .pathways-heading h2{font-size:clamp(27px,7vw,35px)!important;line-height:1.12!important}
+.pathways-section .pathways-heading>p{margin-top:10px!important;font-size:14px!important;line-height:1.55!important}
+#soluciones .pathways-grid{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;scroll-snap-type:x mandatory!important;gap:12px!important;padding-bottom:10px!important;scrollbar-width:thin}
+#soluciones .pathways-grid>.pathway-card{flex:0 0 83%!important;width:83%!important;max-width:83%!important;min-height:175px!important;padding:20px!important;scroll-snap-align:start!important;box-sizing:border-box}
+#soluciones .pathways-grid .pathway-card h3{font-size:20px!important;line-height:1.2!important}
+#soluciones .pathways-grid .pathway-card p{font-size:13px!important;line-height:1.55!important}
+#soluciones .pathways-heading[style]{margin-top:26px!important}
+#soluciones .pathways-note{font-size:13px!important;line-height:1.5!important;margin-block:14px!important}
+#servicios .home-service-grid{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;scroll-snap-type:x mandatory!important;gap:12px!important;padding-bottom:14px!important;scrollbar-width:thin}
+#servicios .home-service-grid>.home-service-card{flex:0 0 88%!important;width:88%!important;max-width:88%!important;min-width:0!important;scroll-snap-align:start!important;padding:20px!important}
+#servicios .home-service-card h3{font-size:21px!important}
+#servicios .home-service-context{font-size:13px!important;line-height:1.5!important;margin-bottom:12px!important}
+#servicios .home-service-offer{padding-top:14px!important;margin-bottom:15px!important}
+#servicios .home-service-topics{gap:8px!important}
+#servicios .home-service-topics li{font-size:12px!important;line-height:1.45!important}
+#servicios .home-service-cta{min-height:48px!important}
+#servicios .home-services-head,#servicios .v3-plans-intro{display:block!important;margin-bottom:15px!important}
+#servicios .home-services-head>p,#servicios .v3-plans-intro>p{font-size:13px!important;line-height:1.5!important;margin-top:10px!important;white-space:normal!important}
+#servicios .home-services-head h2,#servicios .v3-plans-intro h2{font-size:clamp(27px,7vw,34px)!important}
+#metodo-ruta .ruta-grid{gap:12px!important}
+#resultados .section-heading-row{gap:12px!important}
+#resultados .published-slide-info h3{line-height:1.2}
+#nosotros .rodrigo-photo-quote{margin-top:12px!important}
+#preguntas-frecuentes .faq-list{margin-top:16px!important}
+#preguntas-frecuentes summary{min-height:48px;padding-block:13px!important}
+#blog .editorial-heading{gap:12px!important}
+#blog .editorial-grid{gap:12px!important}
+#contacto .contact-layout{gap:26px!important}
+#contacto .contact-ctas{display:flex;flex-wrap:wrap;gap:10px!important}
+#contacto .contact-ctas a{min-height:44px}
+.site-global-footer .site-footer-inner{padding-top:32px!important}
+}
+@media(max-width:370px){
+.nav{padding-inline:9px!important}
+.hero .intro h1{font-size:31px!important}
+#servicios .home-service-grid>.home-service-card{flex-basis:91%!important;width:91%!important;max-width:91%!important}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}#soluciones .pathways-grid,#servicios .home-service-grid{scroll-behavior:auto!important}}

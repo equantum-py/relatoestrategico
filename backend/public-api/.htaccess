@@ -1,0 +1,36 @@
+# Relato Estratégico · API administrativa (docroot: api.relatoestrategico.cl)
+# Solo index.php es punto de entrada. El código, la configuración y los respaldos
+# viven fuera de este directorio (ver docs/DEPLOY-API.md).
+
+Options -Indexes -MultiViews
+ServerSignature Off
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "DENY"
+  Header always set Referrer-Policy "no-referrer"
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  Header unset X-Powered-By
+</IfModule>
+
+# Ningún archivo oculto (.env, .git, .htaccess, etc.) es accesible.
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>
+
+# Respaldos, configuración, SQL, logs y plantillas nunca se sirven.
+<FilesMatch "\.(ini|log|bak|old|orig|sql|sh|env|dist|example|swp|tmp|inc|conf|ya?ml|json|lock|md|zip|tar|gz)$">
+  Require all denied
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Bloquea acceso directo a carpetas de aplicación si alguna vez existieran aquí.
+  RewriteRule ^(src|config|scripts|migrations|tests|logs|backup|backups)(/|$) - [F,L]
+
+  # Todo lo que no sea un archivo o directorio existente va al controlador frontal.
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^ index.php [L,QSA]
+</IfModule>

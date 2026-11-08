@@ -4,9 +4,24 @@ declare(strict_types=1);
 /** Utilidades criptográficas, registro de auditoría y políticas. Nunca registra secretos. */
 final class Security
 {
+    /**
+     * IP del cliente. Solo se lee X-Forwarded-For si la conexión llega desde un proxy
+     * listado en app.trusted_proxies (P2-04). Sin proxies configurados, vale REMOTE_ADDR.
+     */
     public static function clientIp(): string
     {
-        return (string) ($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0');
+        $remote = (string) ($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0');
+        $trusted = (array) Config::app('trusted_proxies', []);
+        if ($trusted !== [] && in_array($remote, $trusted, true)) {
+            $chain = array_map('trim', explode(',', (string) ($_SERVER['HTTP_X_FORWARDED_FOR'] ?? '')));
+            for ($i = count($chain) - 1; $i >= 0; $i--) {
+                $candidate = $chain[$i];
+                if (filter_var($candidate, FILTER_VALIDATE_IP) !== false && !in_array($candidate, $trusted, true)) {
+                    return $candidate;
+                }
+            }
+        }
+        return $remote;
     }
 
     /** HMAC con la clave de la aplicación: permite comparar sin guardar valores en claro. */

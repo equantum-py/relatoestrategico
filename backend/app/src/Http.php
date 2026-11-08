@@ -4,7 +4,10 @@ declare(strict_types=1);
 /** Respuestas JSON, cabeceras de seguridad, CORS y lectura segura del cuerpo. */
 final class Http
 {
-    private const MAX_BODY_BYTES = 120000;
+    /** Límite general para JSON de formularios. */
+    public const MAX_BODY_BYTES = 120000;
+    /** Límite para restaurar respaldos (JSON completo). */
+    public const MAX_BACKUP_BYTES = 10485760;
 
     public static function securityHeaders(): void
     {
@@ -37,7 +40,7 @@ final class Http
         }
     }
 
-    /** Métodos que modifican datos exigen origen permitido y JSON (defensa adicional a CSRF). */
+    /** Métodos que modifican datos exigen origen permitido (defensa adicional a CSRF). */
     public static function requireTrustedOrigin(): void
     {
         $allowed = (string) Config::app('allowed_origin');
@@ -48,16 +51,20 @@ final class Http
         }
     }
 
+    /** Cuerpo JSON de hasta MAX_BODY_BYTES. */
     public static function body(): array
+    {
+        return self::jsonBody(self::MAX_BODY_BYTES);
+    }
+
+    /** Cuerpo JSON con un límite explícito (por ejemplo, restauración de respaldos). */
+    public static function jsonBody(int $maxBytes): array
     {
         $ct = strtolower((string) ($_SERVER['CONTENT_TYPE'] ?? ''));
         if (!str_starts_with($ct, 'application/json')) {
             self::fail(415, 'unsupported_media', 'Envía los datos en formato JSON.');
         }
-        $raw = file_get_contents('php://input', false, null, 0, self::MAX_BODY_BYTES + 1);
-        if ($raw === false || strlen($raw) > self::MAX_BODY_BYTES) {
-            self::fail(413, 'too_large', 'La solicitud es demasiado grande.');
-        }
+        $raw = self::readRaw($maxBytes);
         try {
             $data = json_decode($raw, true, 16, JSON_THROW_ON_ERROR);
         } catch (JsonException) {
@@ -69,11 +76,30 @@ final class Http
         return $data;
     }
 
+    private static function readRaw(int $maxBytes): string
+    {
+        $raw = file_get_contents('php://input', false, null, 0, $maxBytes + 1);
+        if ($raw === false || strlen($raw) > $maxBytes) {
+            self::fail(413, 'too_large', 'La solicitud es demasiado grande.');
+        }
+        return $raw;
+    }
+
     public static function json(int $status, array $data): never
     {
         http_response_code($status);
         header('Content-Type: application/json; charset=utf-8');
         echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+        exit;
+    }
+
+    /** Descarga de archivo (respaldo). No añade envoltorio "ok". */
+    public static function download(string $body, string $filename, string $mime = 'application/json'): never
+    {
+        http_response_code(200);
+        header('Content-Type: ' . $mime . '; charset=utf-8');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        echo $body;
         exit;
     }
 

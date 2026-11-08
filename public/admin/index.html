@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; connect-src 'self' https://api.relatoestrategico.cl; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; connect-src 'self' https://api.relatoestrategico.cl; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <title>Acceso administrativo | Relato Estratégico</title>
 <style>
@@ -16,6 +16,7 @@
 body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg);line-height:1.5}
 button,input,textarea,select{font:inherit}
 button{cursor:pointer}
+button:disabled{cursor:not-allowed}
 a{color:inherit}
 .hidden{display:none!important}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
@@ -41,7 +42,7 @@ a{color:inherit}
 .mobile-toggle{display:none}
 
 /* Componentes */
-.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:0 4px 20px #12334a06}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:0 4px 20px #12334a06;min-width:0}
 .card h2{font-size:19px;margin:0 0 10px}
 .card h3{font-size:15px;margin:0 0 12px}
 .card p{color:#687d8e;font-size:14px;line-height:1.6}
@@ -50,14 +51,15 @@ a{color:inherit}
 .stat span,.muted{color:var(--muted);font-size:13px}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
 .section-heading{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:28px 0 17px;flex-wrap:wrap}
+.section-heading:first-child{margin-top:0}
 .section-heading h2{font-size:23px;letter-spacing:-.04em;margin:0}
 .btn{border:0;background:var(--brand);color:#fff;padding:12px 18px;border-radius:10px;font-size:14px;font-weight:700;min-height:44px;display:inline-flex;align-items:center;justify-content:center}
-.btn:disabled{opacity:.55;cursor:not-allowed}
+.btn:disabled{opacity:.55}
 .btn.secondary{background:#fff;color:#123047;border:1px solid #cfdae3}
 .btn.danger{background:var(--err-bg);color:var(--err);border:1px solid #edc9c9}
-.btn.blue{background:var(--brand-2)}
+.btn.small{min-height:36px;padding:8px 12px;font-size:13px}
 .btn:focus-visible,.nav button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #58b6ff;outline-offset:2px}
-.actions{display:flex;gap:8px;flex-wrap:wrap}
+.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .field{display:block;margin:0 0 17px}
 .field>span{display:block;font-weight:700;font-size:12px;color:#3e586b;margin-bottom:7px}
 .field input,.field textarea,.field select{display:block;width:100%;padding:12px 13px;border:1px solid #cbd8e1;border-radius:9px;color:#16354b;background:#fff;font-size:15px}
@@ -65,15 +67,16 @@ a{color:inherit}
 .field textarea.tall{min-height:320px}
 .field input:disabled,.field textarea:disabled,.field select:disabled{background:#f3f6f8;color:#58707f}
 .field .hint{display:block;font-weight:400;font-size:12px;color:var(--muted);margin-top:6px}
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0}
-.toolbar input,.toolbar select{padding:11px;border:1px solid #cbd8e1;border-radius:9px;background:#fff;min-width:180px;font-size:14px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0;align-items:center}
+.toolbar input,.toolbar select,.inline select{padding:11px;border:1px solid #cbd8e1;border-radius:9px;background:#fff;min-width:180px;font-size:14px}
 .list{display:grid;gap:10px}
 .item{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:15px 17px;background:#fff;border:1px solid #e1e8ed;border-radius:12px}
 .item strong{display:block;font-size:15px;margin-bottom:5px;word-break:break-word}
 .item small{color:#758a9a}
+.item.muted-block{background:#f7f9fb}
 .empty{padding:35px;text-align:center;color:#708698;background:#fff;border:1px dashed #bacbd8;border-radius:14px}
 .tag{display:inline-block;padding:4px 9px;border-radius:20px;background:#eaf4fd;color:#1763a0;font-size:11px;font-weight:700}
-.tag.draft{background:#fff3d9;color:#916117}
+.tag.draft,.tag.off{background:#fff3d9;color:#916117}
 .note{padding:14px 17px;border-radius:13px;background:var(--warn-bg);border:1px solid #eed9aa;color:#76541a;font-size:13px;line-height:1.55;margin:0 0 22px}
 .alert{padding:13px 15px;border-radius:11px;font-size:14px;line-height:1.5;margin:0 0 18px;border:1px solid}
 .alert.error{background:var(--err-bg);border-color:#edc9c9;color:var(--err)}
@@ -87,6 +90,13 @@ a{color:inherit}
 .preview .body{white-space:pre-wrap}
 .toast{position:fixed;bottom:22px;right:22px;z-index:10;background:#102e44;color:#fff;padding:13px 18px;border-radius:11px;box-shadow:0 8px 30px #0003;max-width:360px;font-size:14px}
 .form-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:8px}
+.media-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.media-card{background:#fff;border:1px solid #dce6ed;border-radius:13px;overflow:hidden;display:flex;flex-direction:column}
+.media-card img{display:block;width:100%;height:140px;object-fit:cover;background:#e7edf2}
+.media-card .meta{padding:12px;font-size:12px;word-break:break-word;display:grid;gap:8px}
+.media-card .meta strong{font-size:13px}
+.users-table-note{font-size:12px;color:var(--muted)}
+.badge{display:inline-block;background:#184a6c;color:#bfe6ff;font-size:11px;font-weight:800;letter-spacing:.1em;padding:6px 10px;border-radius:7px}
 
 /* Acceso */
 .login-wrap{min-height:100vh;display:grid;place-items:center;padding:20px;background:var(--brand)}
@@ -96,22 +106,22 @@ a{color:inherit}
 .link-row{margin:16px 0 4px;font-size:14px}
 .link-row a{color:var(--brand-2);font-weight:700}
 .back-link{display:inline-block;margin-top:18px;font-size:14px;color:#4a6276}
-.badge{display:inline-block;background:#184a6c;color:#bfe6ff;font-size:11px;font-weight:800;letter-spacing:.1em;padding:6px 10px;border-radius:7px}
 
 @media(max-width:1100px){
   .stats{grid-template-columns:repeat(2,1fr)}
   .editor{grid-template-columns:1fr}
+  .media-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 @media(max-width:760px){
   .layout{grid-template-columns:1fr}
   .side{position:fixed;z-index:6;transform:translateX(-105%);transition:transform .2s;width:260px;box-shadow:12px 0 40px #0002}
   .layout.menu-open .side{transform:none}
   .mobile-toggle{display:inline-flex}
-  /* La cabecera queda sobre el menú lateral para que el botón ☰ permita cerrarlo. */
   .top{height:auto;min-height:72px;padding:12px 16px;z-index:7}
   .top h1{font-size:17px}
   .content{padding:20px 16px 60px}
   .grid,.stats{grid-template-columns:1fr}
+  .media-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .item{align-items:flex-start;flex-direction:column}
   .section-heading{align-items:flex-start;flex-direction:column}
   .card{padding:18px}
@@ -120,605 +130,12 @@ a{color:inherit}
 }
 @media(max-width:440px){
   .top .pill{display:none}
+  .media-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 <div id="app"><div class="login-wrap"><div class="card login-card"><p class="muted">Cargando…</p></div></div></div>
-
-<script>
-"use strict";
-
-/* ---------- Configuración ---------- */
-const API = "https://api.relatoestrategico.cl";
-const ROLE_LABEL = { admin: "Administrador", editor: "Editor", reader: "Lector" };
-const STATUS_LABEL = { borrador: "Borrador", publicado: "Publicado" };
-
-/* El estado vive solo en memoria: no se usa localStorage, sessionStorage ni cookies propias.
-   La sesión viaja en una cookie HttpOnly gestionada por la API. */
-const state = { user: null, csrf: "", view: "home", postId: null, filters: { q: "", status: "" }, posts: [], settings: null };
-
-const app = document.getElementById("app");
-const $ = (sel, root = document) => root.querySelector(sel);
-
-/* ---------- Utilidades ---------- */
-function esc(value) {
-  return String(value ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-}
-function fmtDate(value) {
-  if (!value) return "";
-  const [d, t] = String(value).split(" ");
-  const [y, m, day] = d.split("-");
-  return `${day}/${m}/${y}${t ? " " + t.slice(0, 5) : ""}`;
-}
-function isSafeImage(url) {
-  return /^https:\/\/[^\s<>"']+$/i.test(url) || /^\/[A-Za-z0-9/_.\-]*$/.test(url);
-}
-function alertBox(message, kind = "error") {
-  if (!message) return "";
-  return `<div class="alert ${kind}" role="${kind === "error" ? "alert" : "status"}">${esc(message)}</div>`;
-}
-function field(label, name, value = "", type = "text", extra = "", hint = "") {
-  return `<label class="field"><span>${esc(label)}</span><input name="${esc(name)}" type="${esc(type)}" value="${esc(value)}" ${extra}>${hint ? `<small class="hint">${esc(hint)}</small>` : ""}</label>`;
-}
-function area(label, name, value = "", extra = "", cls = "", hint = "") {
-  return `<label class="field"><span>${esc(label)}</span><textarea name="${esc(name)}" class="${cls}" ${extra}>${esc(value)}</textarea>${hint ? `<small class="hint">${esc(hint)}</small>` : ""}</label>`;
-}
-function toast(message) {
-  const el = document.createElement("div");
-  el.className = "toast";
-  el.setAttribute("role", "status");
-  el.textContent = message;
-  document.body.appendChild(el);
-  setTimeout(() => el.remove(), 3200);
-}
-function setBusy(button, busy, label) {
-  button.disabled = busy;
-  if (label) button.textContent = label;
-}
-function canWritePosts() { return state.user && (state.user.role === "admin" || state.user.role === "editor"); }
-function canEditSettings() { return state.user && state.user.role === "admin"; }
-
-/* ---------- Comunicación con la API ---------- */
-async function api(method, path, body, token) {
-  const headers = {};
-  if (body !== undefined) headers["Content-Type"] = "application/json";
-  if (method !== "GET") headers["X-CSRF-Token"] = token ?? state.csrf;
-
-  let res;
-  try {
-    res = await fetch(API + path, {
-      method,
-      headers,
-      credentials: "include",
-      cache: "no-store",
-      referrerPolicy: "no-referrer",
-      body: body !== undefined ? JSON.stringify(body) : undefined,
-    });
-  } catch {
-    throw new Error("No pudimos conectar con el servidor. Revisa tu conexión e intenta nuevamente.");
-  }
-
-  let data = null;
-  try { data = await res.json(); } catch { data = null; }
-
-  if (!res.ok || !data || data.ok !== true) {
-    const message = data?.error?.message || "Ocurrió un error inesperado. Intenta nuevamente.";
-    if (res.status === 401 && state.user) {
-      showLogin("Tu sesión se cerró o expiró por inactividad. Inicia sesión nuevamente.");
-    }
-    const err = new Error(message);
-    err.status = res.status;
-    throw err;
-  }
-  return data;
-}
-
-/** Peticiones sin sesión (login y recuperación) usan un token CSRF de formulario recién emitido. */
-async function anonPost(path, body) {
-  const { csrf } = await api("GET", "/v1/auth/csrf");
-  return api("POST", path, body, csrf);
-}
-
-/* ---------- Acceso ---------- */
-function showLogin(message = "", kind = "error") {
-  state.user = null;
-  state.csrf = "";
-  state.view = "login";
-  app.innerHTML = `
-    <div class="login-wrap">
-      <div class="card login-card">
-        <span class="badge">ACCESO RESTRINGIDO</span>
-        <h1>Relato Estratégico.</h1>
-        <p class="muted">Panel de administración del sitio.</p>
-        <div id="login-msg">${alertBox(message, kind)}</div>
-        <form id="login-form" novalidate>
-          <label class="field"><span>Correo electrónico</span>
-            <input name="email" type="email" autocomplete="username" maxlength="254" required>
-          </label>
-          <label class="field"><span>Contraseña</span>
-            <input name="password" type="password" autocomplete="current-password" maxlength="200" required>
-          </label>
-          <button class="btn" id="login-btn" type="submit">Ingresar</button>
-        </form>
-        <p class="link-row"><a href="#" id="forgot">¿Olvidaste tu contraseña?</a></p>
-        <div class="note">Solo personas autorizadas pueden ingresar. Si no tienes acceso, contacta al administrador del sitio.</div>
-        <a class="back-link" href="/">← Volver al sitio</a>
-      </div>
-    </div>`;
-
-  $("#forgot").onclick = (e) => { e.preventDefault(); showForgot(); };
-  $("#login-form").onsubmit = async (e) => {
-    e.preventDefault();
-    const f = e.currentTarget;
-    const email = f.email.value.trim();
-    const password = f.password.value;
-    if (!email || !password) {
-      return showLoginMessage("Escribe tu correo y tu contraseña.");
-    }
-    const btn = $("#login-btn");
-    setBusy(btn, true, "Verificando…");
-    try {
-      const r = await anonPost("/v1/auth/login", { email, password });
-      f.password.value = "";
-      state.user = r.user;
-      state.csrf = r.csrf;
-      await renderShell();
-    } catch (err) {
-      f.password.value = "";
-      setBusy(btn, false, "Ingresar");
-      showLoginMessage(err.message);
-    }
-  };
-}
-
-function showLoginMessage(message, kind = "error") {
-  const box = $("#login-msg");
-  if (box) box.innerHTML = alertBox(message, kind);
-}
-
-function showForgot() {
-  state.view = "forgot";
-  app.innerHTML = `
-    <div class="login-wrap">
-      <div class="card login-card">
-        <span class="badge">RECUPERAR ACCESO</span>
-        <h1>Nueva contraseña</h1>
-        <p class="muted">Escribe el correo de tu cuenta. Si está autorizada, recibirás un enlace para crear una contraseña nueva.</p>
-        <div id="forgot-msg"></div>
-        <form id="forgot-form" novalidate>
-          <label class="field"><span>Correo electrónico</span>
-            <input name="email" type="email" autocomplete="username" maxlength="254" required>
-          </label>
-          <button class="btn" id="forgot-btn" type="submit">Enviar enlace</button>
-        </form>
-        <a class="back-link" href="#" id="back">← Volver al ingreso</a>
-      </div>
-    </div>`;
-  $("#back").onclick = (e) => { e.preventDefault(); showLogin(); };
-  $("#forgot-form").onsubmit = async (e) => {
-    e.preventDefault();
-    const email = e.currentTarget.email.value.trim();
-    if (!email) { $("#forgot-msg").innerHTML = alertBox("Escribe tu correo electrónico."); return; }
-    const btn = $("#forgot-btn");
-    setBusy(btn, true, "Enviando…");
-    try {
-      const r = await anonPost("/v1/auth/password-reset/request", { email });
-      $("#forgot-msg").innerHTML = alertBox(r.message, "info");
-      e.currentTarget.classList.add("hidden");
-    } catch (err) {
-      $("#forgot-msg").innerHTML = alertBox(err.message);
-      setBusy(btn, false, "Enviar enlace");
-    }
-  };
-}
-
-function showResetConfirm(token) {
-  state.view = "reset";
-  app.innerHTML = `
-    <div class="login-wrap">
-      <div class="card login-card">
-        <span class="badge">NUEVA CONTRASEÑA</span>
-        <h1>Crea tu contraseña</h1>
-        <p class="muted">Mínimo 12 caracteres, con al menos una letra y un número. El enlace solo puede usarse una vez.</p>
-        <div id="reset-msg"></div>
-        <form id="reset-form" novalidate>
-          <label class="field"><span>Nueva contraseña</span>
-            <input name="password" type="password" autocomplete="new-password" minlength="12" maxlength="200" required>
-          </label>
-          <label class="field"><span>Repite la contraseña</span>
-            <input name="confirm" type="password" autocomplete="new-password" minlength="12" maxlength="200" required>
-          </label>
-          <button class="btn" id="reset-btn" type="submit">Guardar contraseña</button>
-        </form>
-        <a class="back-link" href="#" id="back">← Volver al ingreso</a>
-      </div>
-    </div>`;
-  $("#back").onclick = (e) => { e.preventDefault(); showLogin(); };
-  $("#reset-form").onsubmit = async (e) => {
-    e.preventDefault();
-    const f = e.currentTarget;
-    const password = f.password.value;
-    if (password.length < 12 || !/[A-Za-z]/.test(password) || !/\d/.test(password)) {
-      $("#reset-msg").innerHTML = alertBox("La contraseña debe tener al menos 12 caracteres, con letras y números.");
-      return;
-    }
-    if (password !== f.confirm.value) {
-      $("#reset-msg").innerHTML = alertBox("Las contraseñas no coinciden.");
-      return;
-    }
-    const btn = $("#reset-btn");
-    setBusy(btn, true, "Guardando…");
-    try {
-      const r = await anonPost("/v1/auth/password-reset/confirm", { token, password });
-      showLogin(r.message, "ok");
-    } catch (err) {
-      $("#reset-msg").innerHTML = alertBox(err.message);
-      setBusy(btn, false, "Guardar contraseña");
-    }
-  };
-}
-
-/* ---------- Estructura del panel ---------- */
-const NAV = [
-  ["home", "⌂", "Inicio"],
-  ["posts", "✎", "Artículos del blog"],
-  ["settings", "⚙", "Ajustes del sitio"],
-];
-
-async function renderShell() {
-  if (!["home", "posts", "settings"].includes(state.view)) state.view = "home";
-  app.innerHTML = `
-    <div class="layout" id="layout">
-      <aside class="side">
-        <div class="brand">Relato<span>Estratégico.</span></div>
-        <nav class="nav" aria-label="Secciones">
-          ${NAV.map(([id, icon, label]) => `<button data-nav="${id}" class="${state.view === id ? "active" : ""}"><span aria-hidden="true">${icon}</span>${esc(label)}</button>`).join("")}
-        </nav>
-        <div class="side-bottom">
-          <div>Sesión iniciada como</div>
-          <strong>${esc(state.user.email)}</strong>
-          <div>${esc(ROLE_LABEL[state.user.role] || "")}</div>
-          <button class="btn secondary" id="logout" type="button">Cerrar sesión</button>
-          <a href="/" target="_blank" rel="noopener">↗ Ver web pública</a>
-        </div>
-      </aside>
-      <div class="main">
-        <header class="top">
-          <div class="actions" style="align-items:center">
-            <button class="btn secondary mobile-toggle" id="toggle" type="button" aria-label="Abrir menú">☰</button>
-            <div>
-              <h1 id="title">Panel</h1>
-              <small>Gestión de contenidos del sitio</small>
-            </div>
-          </div>
-          <span class="pill">● Conectado</span>
-        </header>
-        <div class="content"><div id="screen"></div></div>
-      </div>
-    </div>`;
-
-  document.querySelectorAll("[data-nav]").forEach((b) => b.onclick = () => go(b.dataset.nav));
-  $("#logout").onclick = logout;
-  $("#toggle").onclick = () => $("#layout").classList.toggle("menu-open");
-  await show();
-}
-
-function go(view, postId = null) {
-  state.view = view;
-  state.postId = postId;
-  document.querySelectorAll("[data-nav]").forEach((b) => b.classList.toggle("active", b.dataset.nav === view));
-  $("#layout")?.classList.remove("menu-open");
-  show();
-}
-
-async function logout() {
-  try {
-    await api("POST", "/v1/auth/logout", {});
-  } catch { /* la sesión igualmente se considera cerrada en el navegador */ }
-  showLogin("Cerraste sesión correctamente.", "ok");
-}
-
-async function show() {
-  const screen = $("#screen");
-  const titles = { home: "Inicio", posts: "Artículos del blog", settings: "Ajustes del sitio" };
-  if (!screen) return;
-  $("#title").textContent = state.view === "post" ? (state.postId === "new" ? "Nuevo artículo" : "Editar artículo") : (titles[state.view] || "Panel");
-  screen.innerHTML = '<p class="muted">Cargando…</p>';
-  try {
-    if (state.view === "home") await renderHome(screen);
-    else if (state.view === "posts") await renderPosts(screen);
-    else if (state.view === "post") await renderPostEditor(screen);
-    else if (state.view === "settings") await renderSettings(screen);
-  } catch (err) {
-    screen.innerHTML = alertBox(err.message);
-  }
-}
-
-/* ---------- Inicio ---------- */
-async function renderHome(root) {
-  const { posts } = await api("GET", "/v1/posts");
-  const published = posts.filter((p) => p.status === "publicado").length;
-  const drafts = posts.length - published;
-  root.innerHTML = `
-    <div class="stats">
-      <div class="card stat"><span>Artículos</span><strong>${posts.length}</strong><span>Total en el blog</span></div>
-      <div class="card stat"><span>Publicados</span><strong>${published}</strong><span>Visibles según su estado</span></div>
-      <div class="card stat"><span>Borradores</span><strong>${drafts}</strong><span>Pendientes de revisión</span></div>
-    </div>
-    <div class="section-heading"><h2>Accesos rápidos</h2></div>
-    <div class="grid">
-      <div class="card"><h2>Artículos del blog</h2><p>Revisa, crea o actualiza artículos. Los cambios se guardan en la base de datos del sitio.</p><button class="btn" data-go="posts" type="button">Abrir artículos</button></div>
-      <div class="card"><h2>Ajustes del sitio</h2><p>Datos de contacto, enlaces sociales y textos SEO generales.</p><button class="btn secondary" data-go="settings" type="button">Abrir ajustes</button></div>
-    </div>
-    ${canWritePosts() ? "" : '<div class="note" style="margin-top:22px">Tu rol es de lector: puedes consultar la información, pero no modificarla.</div>'}`;
-  root.querySelectorAll("[data-go]").forEach((b) => b.onclick = () => go(b.dataset.go));
-}
-
-/* ---------- Artículos ---------- */
-async function renderPosts(root) {
-  const q = state.filters.q;
-  const st = state.filters.status;
-  const params = new URLSearchParams();
-  if (q) params.set("q", q);
-  if (st) params.set("status", st);
-  const { posts } = await api("GET", "/v1/posts" + (params.toString() ? "?" + params : ""));
-  state.posts = posts;
-
-  root.innerHTML = `
-    <div class="section-heading">
-      <div><h2>Artículos</h2><p class="muted">Crea, edita y publica artículos del blog.</p></div>
-      ${canWritePosts() ? '<button class="btn" id="new-post" type="button">+ Nuevo artículo</button>' : ""}
-    </div>
-    <div class="toolbar">
-      <input id="search" type="search" placeholder="Buscar por título…" value="${esc(q)}" maxlength="100" aria-label="Buscar artículos">
-      <select id="status-filter" aria-label="Filtrar por estado">
-        <option value="">Todos los estados</option>
-        <option value="borrador" ${st === "borrador" ? "selected" : ""}>Borrador</option>
-        <option value="publicado" ${st === "publicado" ? "selected" : ""}>Publicado</option>
-      </select>
-    </div>
-    <div class="list">
-      ${posts.length ? posts.map((p) => `
-        <div class="item">
-          <div>
-            <strong>${esc(p.title)}</strong>
-            <small>${esc(p.category || "Sin categoría")} · ${esc(fmtDate(p.updated_at))} · <span class="tag ${p.status === "borrador" ? "draft" : ""}">${esc(STATUS_LABEL[p.status] || p.status)}</span></small>
-          </div>
-          <div class="actions">
-            <button class="btn secondary" data-open="${p.id}" type="button">${canWritePosts() ? "Editar" : "Ver"}</button>
-          </div>
-        </div>`).join("") : '<div class="empty">No hay artículos que coincidan con la búsqueda.</div>'}
-    </div>`;
-
-  const search = $("#search", root);
-  let timer;
-  search.oninput = () => {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      state.filters.q = search.value.trim().slice(0, 100);
-      show();
-    }, 350);
-  };
-  $("#status-filter", root).onchange = (e) => {
-    state.filters.status = e.target.value;
-    show();
-  };
-  root.querySelectorAll("[data-open]").forEach((b) => b.onclick = () => go("post", b.dataset.open));
-  const newBtn = $("#new-post", root);
-  if (newBtn) newBtn.onclick = () => go("post", "new");
-}
-
-async function renderPostEditor(root) {
-  const isNew = state.postId === "new";
-  const writable = canWritePosts();
-  let post = {
-    title: "", slug: "", category: "", excerpt: "", body: "", image_url: "", status: "borrador", published_at: null,
-  };
-  if (!isNew) {
-    post = (await api("GET", "/v1/posts/" + encodeURIComponent(state.postId))).post;
-  }
-  const dis = writable ? "" : "disabled";
-
-  root.innerHTML = `
-    <div class="section-heading">
-      <h2>${isNew ? "Nuevo artículo" : esc(post.title)}</h2>
-      <button class="btn secondary" id="back" type="button">← Volver a artículos</button>
-    </div>
-    ${writable ? "" : '<div class="note">Tu rol es de lector: puedes ver el contenido, pero no modificarlo.</div>'}
-    <div class="editor">
-      <form class="card" id="post-form" novalidate>
-        <div id="post-msg"></div>
-        <label class="field"><span>Título</span>
-          <input name="title" maxlength="200" value="${esc(post.title)}" required ${dis}>
-        </label>
-        <label class="field"><span>Slug (dirección del artículo)</span>
-          <input name="slug" maxlength="120" value="${esc(post.slug)}" placeholder="Se genera a partir del título" ${dis}>
-          <small class="hint">Solo letras minúsculas, números y guiones.</small>
-        </label>
-        <div class="grid" style="gap:14px">
-          <label class="field"><span>Categoría</span>
-            <input name="category" maxlength="100" value="${esc(post.category)}" ${dis}>
-          </label>
-          <label class="field"><span>Estado</span>
-            <select name="status" ${dis}>
-              <option value="borrador" ${post.status === "borrador" ? "selected" : ""}>Borrador</option>
-              <option value="publicado" ${post.status === "publicado" ? "selected" : ""}>Publicado</option>
-            </select>
-          </label>
-        </div>
-        ${area("Extracto", "excerpt", post.excerpt, `maxlength="500" ${dis}`)}
-        ${area("Contenido", "body", post.body, `maxlength="50000" ${dis}`, "tall")}
-        <label class="field"><span>Imagen de portada</span>
-          <input name="image_url" maxlength="500" value="${esc(post.image_url)}" placeholder="https://… o /ruta-interna.webp" ${dis}>
-        </label>
-        ${writable ? `<div class="form-actions">
-          <button class="btn" id="save" type="submit">Guardar artículo</button>
-          ${isNew ? "" : '<button class="btn danger" id="delete" type="button">Eliminar</button>'}
-        </div>` : ""}
-      </form>
-      <aside class="card">
-        <h3>Vista previa</h3>
-        <div class="preview" id="preview"></div>
-        <p class="muted" style="margin-top:12px;font-size:12px">La vista previa muestra el texto tal como se guardará.</p>
-      </aside>
-    </div>`;
-
-  const form = $("#post-form", root);
-  const renderPreview = () => {
-    const x = Object.fromEntries(new FormData(form));
-    const box = $("#preview", root);
-    box.replaceChildren();
-    if (x.image_url && isSafeImage(x.image_url)) {
-      const img = document.createElement("img");
-      img.src = x.image_url;
-      img.alt = "";
-      img.referrerPolicy = "no-referrer";
-      box.appendChild(img);
-    }
-    const cat = document.createElement("span");
-    cat.className = "tag";
-    cat.textContent = x.category || "Sin categoría";
-    const h = document.createElement("h2");
-    h.textContent = x.title || "Título del artículo";
-    const ex = document.createElement("p");
-    ex.textContent = x.excerpt || "";
-    const body = document.createElement("div");
-    body.className = "body";
-    body.textContent = x.body || "";
-    box.append(cat, h, ex, body);
-  };
-  form.addEventListener("input", renderPreview);
-  renderPreview();
-
-  $("#back", root).onclick = () => go("posts");
-
-  if (!writable) return;
-
-  form.onsubmit = async (e) => {
-    e.preventDefault();
-    const x = Object.fromEntries(new FormData(form));
-    const payload = {
-      title: x.title.trim(),
-      slug: x.slug.trim(),
-      category: x.category.trim(),
-      excerpt: x.excerpt.trim(),
-      body: x.body,
-      image_url: x.image_url.trim(),
-      status: x.status,
-    };
-    if (payload.title.length < 3) { $("#post-msg", root).innerHTML = alertBox("El título debe tener al menos 3 caracteres."); return; }
-    if (payload.image_url && !isSafeImage(payload.image_url)) {
-      $("#post-msg", root).innerHTML = alertBox("La imagen debe ser una dirección https:// completa o una ruta que empiece con /.");
-      return;
-    }
-    const btn = $("#save", root);
-    setBusy(btn, true, "Guardando…");
-    try {
-      const r = isNew
-        ? await api("POST", "/v1/posts", payload)
-        : await api("PUT", "/v1/posts/" + encodeURIComponent(state.postId), payload);
-      state.postId = String(r.post.id);
-      toast(isNew ? "Artículo creado." : "Cambios guardados.");
-      await show();
-    } catch (err) {
-      $("#post-msg", root).innerHTML = alertBox(err.message);
-      setBusy(btn, false, "Guardar artículo");
-    }
-  };
-
-  const del = $("#delete", root);
-  if (del) {
-    del.onclick = async () => {
-      if (!confirm("¿Eliminar este artículo? Esta acción no se puede deshacer.")) return;
-      setBusy(del, true, "Eliminando…");
-      try {
-        await api("DELETE", "/v1/posts/" + encodeURIComponent(state.postId));
-        toast("Artículo eliminado.");
-        go("posts");
-      } catch (err) {
-        $("#post-msg", root).innerHTML = alertBox(err.message);
-        setBusy(del, false, "Eliminar");
-      }
-    };
-  }
-}
-
-/* ---------- Ajustes ---------- */
-const SETTING_FIELDS = [
-  ["siteName", "Nombre del sitio", "text", ""],
-  ["email", "Correo de contacto", "email", ""],
-  ["whatsapp", "WhatsApp", "text", "Formato internacional, por ejemplo +56 9 …"],
-  ["calendar", "Enlace de agenda", "url", "Debe comenzar con https://"],
-  ["linkedin", "Enlace de LinkedIn", "url", "Debe comenzar con https://"],
-  ["instagram", "Enlace de Instagram", "url", "Debe comenzar con https://"],
-  ["location", "Ubicación", "text", ""],
-  ["seoTitle", "Título SEO", "text", ""],
-  ["seoDescription", "Descripción SEO", "textarea", ""],
-  ["ogImage", "Imagen para compartir", "url", "Dirección https:// completa o ruta interna"],
-];
-
-async function renderSettings(root) {
-  const { settings } = await api("GET", "/v1/settings");
-  state.settings = settings;
-  const editable = canEditSettings();
-  const dis = editable ? "" : "disabled";
-
-  root.innerHTML = `
-    <div class="section-heading"><div><h2>Ajustes generales</h2><p class="muted">Datos de contacto y textos generales que usa el sitio.</p></div></div>
-    ${editable ? "" : '<div class="note">Solo el administrador puede modificar los ajustes. Puedes consultarlos aquí.</div>'}
-    <form class="card" id="settings-form" novalidate style="max-width:820px">
-      <div id="settings-msg"></div>
-      ${SETTING_FIELDS.map(([key, label, type, hint]) => type === "textarea"
-        ? area(label, key, settings[key] ?? "", `maxlength="300" ${dis}`, "", hint)
-        : field(label, key, settings[key] ?? "", type, `maxlength="300" ${dis}`, hint)).join("")}
-      ${editable ? '<div class="form-actions"><button class="btn" id="save-settings" type="submit">Guardar ajustes</button></div>' : ""}
-    </form>`;
-
-  if (!editable) return;
-
-  $("#settings-form", root).onsubmit = async (e) => {
-    e.preventDefault();
-    const x = Object.fromEntries(new FormData(e.currentTarget));
-    const payload = {};
-    SETTING_FIELDS.forEach(([key]) => { payload[key] = String(x[key] ?? "").trim(); });
-    const btn = $("#save-settings", root);
-    setBusy(btn, true, "Guardando…");
-    try {
-      const r = await api("PUT", "/v1/settings", payload);
-      state.settings = r.settings;
-      $("#settings-msg", root).innerHTML = alertBox("Ajustes guardados correctamente.", "ok");
-    } catch (err) {
-      $("#settings-msg", root).innerHTML = alertBox(err.message);
-    } finally {
-      setBusy(btn, false, "Guardar ajustes");
-    }
-  };
-}
-
-/* ---------- Arranque ---------- */
-async function boot() {
-  const params = new URLSearchParams(location.search);
-  const resetToken = params.get("reset");
-  if (resetToken !== null) {
-    history.replaceState(null, "", location.pathname);
-    if (/^[a-f0-9]{64}$/.test(resetToken)) {
-      showResetConfirm(resetToken);
-      return;
-    }
-    showLogin("El enlace de recuperación no es válido. Solicita uno nuevo.");
-    return;
-  }
-  try {
-    const me = await api("GET", "/v1/auth/me");
-    state.user = me.user;
-    state.csrf = me.csrf;
-    await renderShell();
-  } catch {
-    showLogin();
-  }
-}
-boot();
-</script>
+<script src="app.js" defer></script>
 </body>
 </html>

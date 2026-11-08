@@ -22,9 +22,19 @@ return [
         'mail_from' => 'no-reply@relatoestrategico.cl',
         'session_idle_minutes' => 30,
         'session_max_hours' => 8,
+        // Intentos fallidos por par IP+cuenta en 15 min (bloqueo acotado a esa conexión).
         'max_login_attempts' => 5,
-        'lockout_minutes' => 15,
+        // Intentos fallidos por IP en 15 min, y por cuenta en 1 hora (umbral alto, frena ataques distribuidos).
         'ip_attempts_per_15min' => 30,
+        'account_attempts_per_hour' => 50,
         'reset_minutes' => 30,
+        // Enlaces de recuperación o invitación por cuenta y hora.
+        'reset_per_account_per_hour' => 3,
+        // Proxies de confianza (IP). Vacío = usar REMOTE_ADDR. Solo listar proxies controlados por el hosting.
+        'trusted_proxies' => [],
+        // Biblioteca multimedia: carpeta pública de imágenes y su URL base.
+        'media_dir' => '/home/cre116835/public_html/relato-api/media',
+        'media_base_url' => 'https://api.relatoestrategico.cl/media',
+        'media_max_bytes' => 5242880,
     ],
 ];

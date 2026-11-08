@@ -240,14 +240,15 @@ function showForgot() {
   $("#back").onclick = (e) => { e.preventDefault(); showLogin(); };
   $("#forgot-form").onsubmit = async (e) => {
     e.preventDefault();
-    const email = e.currentTarget.email.value.trim();
+    const form = e.currentTarget;
+    const email = form.email.value.trim();
     if (!email) { $("#forgot-msg").innerHTML = alertBox("Escribe tu correo electrónico."); return; }
     const btn = $("#forgot-btn");
     setBusy(btn, true, "Enviando…");
     try {
       const r = await anonPost("/v1/auth/password-reset/request", { email });
       $("#forgot-msg").innerHTML = alertBox(r.message, "info");
-      e.currentTarget.classList.add("hidden");
+      form.classList.add("hidden");
     } catch (err) {
       $("#forgot-msg").innerHTML = alertBox(err.message);
       setBusy(btn, false, "Enviar enlace");

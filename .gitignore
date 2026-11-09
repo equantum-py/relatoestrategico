@@ -1,0 +1,7 @@
+
+# Panel administrativo: nunca versionar configuración real, respaldos ni logs
+backend/**/config.php
+!backend/app/config/config.example.php
+*.log
+*.bak
+*.sql.gz

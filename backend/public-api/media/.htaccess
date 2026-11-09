@@ -1,0 +1,26 @@
+# Biblioteca multimedia pública: solo imágenes con nombre aleatorio (32 hex + extensión).
+# Ningún archivo de esta carpeta puede ejecutarse ni listarse.
+
+Options -Indexes -ExecCGI -MultiViews
+ServerSignature Off
+
+<IfModule mod_php.c>
+  php_flag engine off
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Cache-Control "public, max-age=2592000"
+</IfModule>
+
+RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .phar .pl .py .cgi .sh
+RemoveType .php .phtml .php3 .php4 .php5 .php7 .phar
+
+# Primero se deniega todo; después se permiten solo las imágenes con el nombre generado.
+<FilesMatch ".*">
+  Require all denied
+</FilesMatch>
+
+<FilesMatch "^[a-f0-9]{32}\.(jpg|png|webp)$">
+  Require all granted
+</FilesMatch>

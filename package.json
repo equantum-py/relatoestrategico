@@ -1,0 +1,6 @@
+{
+  "name": "relatoestrategico",
+  "private": true,
+  "scripts": { "test": "node --test tests/*.test.cjs", "test:e2e": "node tests/browser.cjs" },
+  "devDependencies": { "@playwright/test": "1.61.1", "linkedom": "0.18.12" }
+}

@@ -1,0 +1,448 @@
+{
+  "home": {
+    "key": "home",
+    "label": "Inicio",
+    "description": "Portada y secciones actuales",
+    "sort_order": 1,
+    "blocks": [
+      {
+        "id": 1,
+        "sort_order": 1,
+        "title": "Hero: Tu experiencia tiene valor",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 2,
+        "sort_order": 2,
+        "title": "Soluciones según objetivo",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 3,
+        "sort_order": 3,
+        "title": "Cuatro servicios",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 4,
+        "sort_order": 4,
+        "title": "Resultados destacados",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 5,
+        "sort_order": 5,
+        "title": "Rodrigo Barría",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 6,
+        "sort_order": 6,
+        "title": "Noticias, tendencias y tips de LinkedIn",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 7,
+        "sort_order": 7,
+        "title": "Contacto y agenda",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      }
+    ]
+  },
+  "preguntas": {
+    "key": "preguntas",
+    "label": "Preguntas frecuentes",
+    "description": "Ocho preguntas actuales",
+    "sort_order": 6,
+    "blocks": [
+      {
+        "id": 26,
+        "sort_order": 1,
+        "title": "¿Para quién es la asesoría de marca personal en LinkedIn?",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 27,
+        "sort_order": 2,
+        "title": "¿Puedo construir mi marca personal en LinkedIn por mi cuenta?",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 28,
+        "sort_order": 3,
+        "title": "¿Cuánto cuestan los servicios?",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 29,
+        "sort_order": 4,
+        "title": "¿Cuánto tiempo debo dedicar si trabajan conmigo?",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 30,
+        "sort_order": 5,
+        "title": "¿Los contenidos serán genéricos? ¿Sonarán como yo?",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 31,
+        "sort_order": 6,
+        "title": "¿En cuánto tiempo se ven resultados?",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 32,
+        "sort_order": 7,
+        "title": "¿Garantizan más seguidores en LinkedIn?",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 33,
+        "sort_order": 8,
+        "title": "¿Puedo conseguir empleo o negocios gracias a LinkedIn?",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      }
+    ]
+  },
+  "servicios": {
+    "key": "servicios",
+    "label": "Servicios",
+    "description": "Cuatro soluciones comerciales",
+    "sort_order": 3,
+    "blocks": [
+      {
+        "id": 11,
+        "sort_order": 1,
+        "title": "Perfil Estratégico",
+        "subtitle": "",
+        "description": "Diagnóstico e informe; optimización completa del perfil con SEO; pilares de contenido y guía de uso de LinkedIn. Pago único.",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 12,
+        "sort_order": 2,
+        "title": "Presencia Constante",
+        "subtitle": "",
+        "description": "Ocho contenidos mensuales, networking estratégico, gestión de interacciones y métricas. Ciclos renovables de tres meses.",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 13,
+        "sort_order": 3,
+        "title": "LinkedIn Elite",
+        "subtitle": "",
+        "description": "Ghostwriting ejecutivo (12–16 contenidos), liderazgo de opinión, gestión reputacional, artículos, newsletter y medios. Cupos limitados.",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 14,
+        "sort_order": 4,
+        "title": "Taller Embajadores LinkedIn",
+        "subtitle": "",
+        "description": "Capacitación para equipos: marca personal, optimización de perfiles, técnicas de crecimiento y ejercicios prácticos.",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      }
+    ]
+  },
+  "nosotros": {
+    "key": "nosotros",
+    "label": "Sobre nosotros",
+    "description": "Biografía, fotografía y Método RUTA",
+    "sort_order": 5,
+    "blocks": [
+      {
+        "id": 20,
+        "sort_order": 1,
+        "title": "Rodrigo Barría, periodista senior y director editorial",
+        "subtitle": "",
+        "description": "Investiga, escribe y transforma trayectorias profesionales en relatos estratégicos para LinkedIn.",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 21,
+        "sort_order": 2,
+        "title": "Fotografía: /rodrigo.webp",
+        "subtitle": "",
+        "description": "Fotografía existente en el repositorio y utilizada en Home y Sobre nosotros.",
+        "button": "",
+        "url": "",
+        "image_url": "/rodrigo.webp"
+      },
+      {
+        "id": 22,
+        "sort_order": 3,
+        "title": "Método RUTA: Revisar",
+        "subtitle": "",
+        "description": "Diagnóstico de perfil, trayectoria, industria y objetivos.",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 23,
+        "sort_order": 4,
+        "title": "Método RUTA: Unificar",
+        "subtitle": "",
+        "description": "Ordenar el relato y optimizar el perfil.",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 24,
+        "sort_order": 5,
+        "title": "Método RUTA: Traducir",
+        "subtitle": "",
+        "description": "Convertir la experiencia en contenidos relevantes.",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 25,
+        "sort_order": 6,
+        "title": "Método RUTA: Activar",
+        "subtitle": "",
+        "description": "Publicar, medir y ajustar la estrategia.",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      }
+    ]
+  },
+  "soluciones": {
+    "key": "soluciones",
+    "label": "Soluciones",
+    "description": "Tres objetivos profesionales",
+    "sort_order": 2,
+    "blocks": [
+      {
+        "id": 8,
+        "sort_order": 1,
+        "title": "Mejorar oportunidades laborales",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 9,
+        "sort_order": 2,
+        "title": "Conseguir oportunidades de negocio",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 10,
+        "sort_order": 3,
+        "title": "Posicionarme como referente",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      }
+    ]
+  },
+  "resultados": {
+    "key": "resultados",
+    "label": "Resultados",
+    "description": "Indicadores publicados y evidencias",
+    "sort_order": 4,
+    "blocks": [
+      {
+        "id": 15,
+        "sort_order": 1,
+        "title": "Interacciones",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 16,
+        "sort_order": 2,
+        "title": "+2.135 % impresiones",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 17,
+        "sort_order": 3,
+        "title": "+24,1 % seguidores",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 18,
+        "sort_order": 4,
+        "title": "+57,4 % impresiones anuales",
+        "subtitle": "",
+        "description": "Indicador mostrado en la web. Validar evidencia y período antes de usarlo comercialmente.",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 19,
+        "sort_order": 5,
+        "title": "Gráficos y evidencias",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      }
+    ]
+  },
+  "contacto": {
+    "key": "contacto",
+    "label": "Contacto",
+    "description": "Datos y canales actuales",
+    "sort_order": 7,
+    "blocks": [
+      {
+        "id": 34,
+        "sort_order": 1,
+        "title": "WhatsApp: +56 9 5085 9889",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 35,
+        "sort_order": 2,
+        "title": "Correo: contacto@relatoestrategico.cl",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 36,
+        "sort_order": 3,
+        "title": "Agendamiento: Google Calendar",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "https://calendar.app.google/K8EH7bzSrJ4ApRGr5",
+        "image_url": ""
+      },
+      {
+        "id": 37,
+        "sort_order": 4,
+        "title": "LinkedIn: Rodrigo Barría Reyes",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 38,
+        "sort_order": 5,
+        "title": "Instagram: @relatoestrategico",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      },
+      {
+        "id": 39,
+        "sort_order": 6,
+        "title": "Santiago, Chile · Atención remota y presencial",
+        "subtitle": "",
+        "description": "",
+        "button": "",
+        "url": "",
+        "image_url": ""
+      }
+    ]
+  }
+}

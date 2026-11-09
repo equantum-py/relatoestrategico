@@ -1,6 +1,6 @@
-# Contrato de identidad de bloques — propuesta para contraste con cPanel
+# Contrato de identidad de bloques — paquete PHP validado en aislamiento
 
-**Estado: implementado y probado en frontend; pendiente de confirmación/adaptación del PHP vigente por Claude.** No es un contrato observado en producción. No se autoriza modificar el backend productivo.
+**Estado actualizado:** contrastado e integrado con el paquete PHP entregado por Claude (SHA-256 `85aa4113fccf1d42d8d83cc6ff7e3b38f1b5412ec861e6ce4a9dbd7b1f213d7a`). Ver [validación integrada](VALIDACION-INTEGRADA-PR5.md). No se afirma que ese paquete esté instalado en producción.
 
 Comprobación pública de esta revisión: `GET /v1/public/pages/home` respondió 200, siete bloques, sin `identity_schema` y sin `block_key`. GitHub no contiene una copia nueva del PHP efectivamente desplegado. Por eso la candidata conserva el HTML aprobado para esas respuestas; no intenta adivinar vínculos.
 
@@ -35,9 +35,9 @@ El catálogo explícito de 39 claves está en `data/block-identity-bootstrap.jso
 
 ## Obligaciones del backend a demostrar en aislamiento
 
-1. Persistir una clave única e inmutable para cada bloque. Las claves conocidas son las del catálogo revisado. Para bloques nuevos, generar una clave persistente `<page>.custom.<uuid>` en el servidor; no regenerarla al exportar/restaurar ni derivarla del contenido.
+1. Persistir una clave única e inmutable para cada bloque. Las claves conocidas son las del catálogo revisado. Para bloques nuevos, generar una clave persistente `<page>.custom.<hex16>` en el servidor; no regenerarla al exportar/restaurar ni derivarla del contenido.
 2. Incluir la misma clave en lecturas administrativas, exportación y restauración. Una edición normal no debe poder cambiarla. El campo no se expone como entrada editable en el panel.
-3. Validar unicidad y pertenencia a la página. Rechazar claves duplicadas, de otra página, desconocidas o ausentes antes de comenzar una restauración; usar transacción y restricciones consistentes en MariaDB. Definir tratamiento explícito y aislado de respaldos antiguos sin claves: no inferir silenciosamente por título/posición.
+3. Validar unicidad y pertenencia a la página. Rechazar claves duplicadas, de otra página o ausentes antes de comenzar una restauración; el PHP no limita todas las claves al catálogo del frontend, por lo que una recuperación requiere además el preflight local; usar transacción y restricciones consistentes en MariaDB. Definir tratamiento explícito y aislado de respaldos antiguos sin claves: no inferir silenciosamente por título/posición.
 4. Conservar las claves aunque se reasignen IDs/autoincrement. No permitir que un ID reutilizado cambie la asociación. La importación no debe convertir un bloque editado en un bloque nuevo solo porque cambió su título.
 5. En rutas públicas, devolver solo bloques visibles. La lista es completa para esa página. No filtrar bloques ocultos en el navegador ni exponer su contenido. El cliente deriva las plantillas ausentes únicamente después de validar todo el contrato.
 6. Emitir `identity_schema` solo después de adoptar y verificar el contrato para la página completa. El frontend rechaza toda respuesta sin versión, con claves faltantes/duplicadas o campos incompletos, sin aplicar ocultaciones o cambios parciales.
@@ -48,4 +48,4 @@ Las claves conocidas son semánticas y se asignan explícitamente a nodos de la 
 
 En base aislada: capturar 39 claves y contenido; editar todos los títulos con marcadores ficticios; exportar; cambiar el rango de IDs de destino y restaurar. Comprobar por SELECT y por API que las mismas claves señalan los mismos marcadores, orden y visibilidad. Repetir con IDs reutilizados en distinto orden. La restauración inválida/duplicada debe dejar el estado anterior intacto.
 
-Las pruebas Node de PR #5 cubren el consumidor frontend del contrato propuesto, no prueban que estas obligaciones ya estén implementadas en el PHP desplegado. Mantener NO GO hasta recibir el contraste y la evidencia SQL de Claude.
+La validación integrada posterior ejecutó PHP/MariaDB reales y confirmó las 39 claves con IDs cambiados. El formato observado de las claves nuevas es `<page>.custom.<16 caracteres hexadecimales>`. La aplicación productiva y su migración siguen fuera de esta validación aislada; ver el informe vigente.

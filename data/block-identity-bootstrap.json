@@ -1,6 +1,6 @@
 {
   "schema": "relato.block-key.v1",
-  "status": "proposed-awaiting-deployed-PHP-review",
+  "status": "verified-against-supplied-PHP-archive-not-production",
   "reference_commit": "e4172ce",
   "note": "IDs y títulos solo son precondiciones de migración única; nunca identidad de runtime. No ejecutar en producción.",
   "bindings": [
@@ -238,5 +238,6 @@
       "bootstrap_observed_id": 39,
       "bootstrap_expected_title": "Santiago, Chile · Atención remota y presencial"
     }
-  ]
+  ],
+  "verified_backend_sha256": "85aa4113fccf1d42d8d83cc6ff7e3b38f1b5412ec861e6ce4a9dbd7b1f213d7a"
 }

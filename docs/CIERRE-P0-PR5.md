@@ -1,5 +1,7 @@
 # Cierre P0 de PR #5 — frontend corregido, integración pendiente
 
+> Informe vigente: [VALIDACION-INTEGRADA-PR5.md](VALIDACION-INTEGRADA-PR5.md). El contenido inferior conserva el estado de la revisión anterior.
+
 **Dictamen: NO GO para fusión y despliegue.** Revisión de `e4172ce`, exclusivamente en `integration/frontend-php-api`. No se creó otra rama ni se modificó el backend productivo.
 
 ## Estado de los dos defectos

@@ -1,5 +1,7 @@
 # Integración frontend + API — revisión
 
+> Informe vigente: [VALIDACION-INTEGRADA-PR5.md](VALIDACION-INTEGRADA-PR5.md). El contenido inferior conserva el estado de la revisión anterior.
+
 > Estado vigente de este cierre: [CIERRE-P0-PR5.md](CIERRE-P0-PR5.md). Las descripciones de identidad por IDs/títulos de este documento corresponden a la revisión anterior y quedaron sustituidas por el contrato estable propuesto.
 
 **Cierre de aceptación:** [Informe PR #5](ACEPTACION-PR5.md). Dictamen vigente: **NO GO para fusión y despliegue**; ver defectos, resultados y accesos pendientes en ese informe.

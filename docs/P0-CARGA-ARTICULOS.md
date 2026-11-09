@@ -1,5 +1,7 @@
 # Carga inicial de contenido aprobado — preparada, no ejecutada
 
+> Informe vigente: [VALIDACION-INTEGRADA-PR5.md](VALIDACION-INTEGRADA-PR5.md). El contenido inferior conserva el estado de la revisión anterior.
+
 `data/approved-posts.seed.json` contiene seis entradas extraídas literalmente del arreglo ya existente en `public/blog/index.html` de `e4172ce`.
 
 Se preservan slugs, títulos, categorías, extractos y URLs de imágenes. Son **resúmenes editoriales**, no textos completos: el sitio existente dice que los cuerpos completos aún no están incorporados. `body` se mantiene vacío; no se inventaron párrafos, autores, fechas ni artículos. La candidata mantiene esa presentación de resumen después de importar una entrada sin cuerpo.

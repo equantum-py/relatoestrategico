@@ -1,0 +1,223 @@
+{
+  "reference_frontend": "a6d87a3",
+  "supplied_backend_file": "relato-app-p0-block-key.tar.gz",
+  "supplied_backend_library_id": "libfile_6e404021a8ac819197bc7534517ff221",
+  "supplied_claude_report": {
+    "name": "resultados-pruebas-p0.txt",
+    "claimed_pass": 50,
+    "claimed_fail": 0,
+    "whole_suite_rerun": false
+  },
+  "integration": {
+    "scope": "frontend + supplied PHP + MariaDB 10.11; local transport only; no production API requests",
+    "results": [
+      {
+        "name": "PHP and MariaDB isolated fixture ready",
+        "result": "PASS",
+        "databaseVersion": "10.11.14-MariaDB-0ubuntu0.24.04.1",
+        "knownBlocks": 39
+      },
+      {
+        "name": "invalid credentials rejected by real PHP; panel remains protected",
+        "result": "PASS"
+      },
+      {
+        "name": "browser login real PHP session and secure cookie",
+        "result": "PASS"
+      },
+      {
+        "name": "all 39 real PHP block keys match frontend catalog",
+        "result": "PASS"
+      },
+      {
+        "name": "panel reorder persists and real public page follows semantic keys",
+        "result": "PASS"
+      },
+      {
+        "name": "panel edits actual PHP and MariaDB; public block reflects persisted title",
+        "result": "PASS"
+      },
+      {
+        "name": "custom hex16 key accepted; a6 baseline incompatibility reproduced",
+        "result": "PASS"
+      },
+      {
+        "name": "panel visibility change removes block from real anonymous response and DOM",
+        "result": "PASS"
+      },
+      {
+        "name": "panel export and restore against MariaDB preserve 39 keys plus custom despite changed IDs",
+        "result": "PASS"
+      },
+      {
+        "name": "panel can navigate and edit after IDs change on restore",
+        "result": "PASS"
+      },
+      {
+        "name": "legacy backup rejection visible in panel and MariaDB unchanged",
+        "result": "PASS"
+      },
+      {
+        "name": "panel creation and edit persisted; all six approved summaries match exact text and image URLs",
+        "result": "PASS"
+      },
+      {
+        "name": "panel publication reaches anonymous PHP detail without invented article body",
+        "result": "PASS"
+      },
+      {
+        "name": "panel retirement persists and public PHP detail returns 404",
+        "result": "PASS"
+      },
+      {
+        "name": "real multipart upload persists and private preview renders; unpublished public URL unavailable",
+        "result": "PASS"
+      },
+      {
+        "name": "supplied media sync publishes referenced image; anonymous browser renders it",
+        "result": "PASS"
+      },
+      {
+        "name": "panel blocks deletion of referenced media with real 409",
+        "result": "PASS"
+      },
+      {
+        "name": "reader real browser can preview but cannot write or export",
+        "result": "PASS"
+      },
+      {
+        "name": "editor real browser writes blocks and backend denies settings",
+        "result": "PASS"
+      },
+      {
+        "name": "unlinked media deletes from panel, MariaDB and both filesystems",
+        "result": "PASS"
+      },
+      {
+        "name": "admin settings persist in MariaDB and public PHP whitelist",
+        "result": "PASS"
+      },
+      {
+        "name": "actual expired MariaDB session removes protected panel",
+        "result": "PASS"
+      },
+      {
+        "name": "real PHP public pages and protected panel fit desktop and mobile",
+        "result": "PASS"
+      },
+      {
+        "name": "browser logout real PHP session invalidation",
+        "result": "PASS"
+      },
+      {
+        "name": "no browser JavaScript errors",
+        "result": "PASS"
+      },
+      {
+        "name": "isolated database and ephemeral config cleaned",
+        "result": "PASS"
+      }
+    ],
+    "passed": 26,
+    "failed": 0
+  },
+  "backend_integrity": {
+    "bundle_sha256": "85aa4113fccf1d42d8d83cc6ff7e3b38f1b5412ec861e6ce4a9dbd7b1f213d7a",
+    "backend_source_unchanged": true,
+    "source_files_compared": 27,
+    "files": {
+      "relato-app/src/Session.php": "35edecfe59f3ca7278e40d3143844d185a8b67a5c34bea097cefe1bdbe27c417",
+      "relato-app/src/Http.php": "cd7200c67d9ea1ab64b575d61583720fd64e0a7c343d7d115fed854f5d0c831b",
+      "relato-app/src/Users.php": "f415584889ab2322d3b27c5942e0ddc4e3850a6f4947ab68cc7851dab6bd61dd",
+      "relato-app/src/Security.php": "f64226f65d62c70cf70a83085f2775d88f85fa1c2f99bc1ec03a06c026ba2ee2",
+      "relato-app/src/Validate.php": "ab773271ee0580d71a4359a16c3f31a05474cd2de3ddeb4476b38c176a7f0e5b",
+      "relato-app/src/PublicApi.php": "129e3c70d4e5dad0987fe2250e82e5ff6c9957a923d94d607bc85b5113210767",
+      "relato-app/src/Media.php": "97208d4da62f4afbdd489d1c1d559fe62e33e551d2cd40e5af07718e5c2f0d80",
+      "relato-app/src/Config.php": "02516468204a858deaa825541b992e66df3a2f1bc0025bc5152694918a263060",
+      "relato-app/src/Auth.php": "36b8205f9891049c60cf6246e1a8590a4f7f0dc484fbd8e8b48df6158ca17dd1",
+      "relato-app/src/bootstrap.php": "6d984a0e14e60c6c3443f1be634a7e1d69fe669918eb1c779e7055a9c9f711fe",
+      "relato-app/src/Db.php": "7d7face867e6e4f33f11d79e1db5385cc450651261ade277139594d91d3af369",
+      "relato-app/src/Content.php": "9548ca7293335b6663d16fbf29c3943bba86b6847cc10f38f2506c15c0e2b5ef",
+      "relato-app/src/Pages.php": "1a3ee2e22dec9ed88e426e3a3ffc91808d9e8cae9c51773a1192609558d64ed7",
+      "relato-app/src/Mailer.php": "a075871db94da23380666a6cde9156d0d85e8701b5dd1febdd1b7b9de29fa263",
+      "relato-app/src/Backup.php": "fd6404c0a2b17a7a4785f639d42a1a3643027e15b0e536f27c77e5c84beb1001",
+      "relato-app/migrations/002_block_key/0_preflight_readonly.sql": "90d6762e9544fc628fe1a37b89a8f84af3f8a56ea9829894cc5a6e2613eb5710",
+      "relato-app/migrations/002_block_key/2_bind_39_keys_dml.sql": "aab4da29527cd358d6c06ea44664221ab8422ac416d36542f484669bbc12d71f",
+      "relato-app/migrations/002_block_key/1_add_column_ddl.sql": "567a86936f6e5f85d0c6374f23a24b70c2863db4f82ef59fd67cf283d903c663",
+      "relato-app/migrations/002_block_key/3_constraints_ddl.sql": "5b3ac0a8f15928a179b87e12db7be4603a7ce1b6b51b51c5251b1682e9abcebf",
+      "relato-app/migrations/002_block_key/ROLLBACK_ddl.sql": "4d8042d99608c5e340a1f637fa66d9066b9611e2e792dd5a016abfd12fa3b3c2",
+      "relato-app/migrations/001_schema.sql": "0f078e4d59588ed0fbe815dd2c638d5738e0025081bc7a2dac003ebd9f529c1d",
+      "relato-app/scripts/seed_pages.php": "a8bfdfa13ef0c762d452d3f1ca8f6c4e473ff8c369de7cc098a71f60943568a4",
+      "relato-app/scripts/sync_media.php": "ae8d59202abf435d850d1987821736089627e12c95a1f2543becf055f4acd7cb",
+      "relato-app/scripts/create_admin.php": "8b6a2f88a2b990c365ced21d9f7663131410976132ad13f18918bfea70ec6342",
+      "public_html/relato-api/index.php": "f68750e5d1b6429bca1cca335196d612102d68c9858d39877daed8cf524859d0",
+      "public_html/relato-api/media/.htaccess": "6f72053dadd82953c42ea22b77d1846b62d8499475ee6538a9993e5b57f6c25b",
+      "public_html/relato-api/.htaccess": "dfdeab862ecd553a46d7af6abffbe2e628820bddce9e29a7dac89b4c827fe074"
+    }
+  },
+  "approved_assets": {
+    "scope": "approved static content + original image byte snapshots; production API blocked",
+    "results": [
+      {
+        "width": 390,
+        "imagesDecoded": 6,
+        "result": "PASS"
+      },
+      {
+        "width": 1440,
+        "imagesDecoded": 6,
+        "result": "PASS"
+      }
+    ],
+    "assets": [
+      {
+        "url": "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1200&q=82",
+        "mime": "image/jpeg",
+        "size": 165334,
+        "sha256": "63c2ebfe573281367f98e5a776c4cbcc2d0aa6ebbf14bc3cba8c75114a06a7f5"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1000&q=80",
+        "mime": "image/jpeg",
+        "size": 198003,
+        "sha256": "60798f5d5d5d02d6c44315ac0d3dff9cb83fbeb3df221a4bfa535580e8f96ad9"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1000&q=80",
+        "mime": "image/jpeg",
+        "size": 116471,
+        "sha256": "2d7fa61843e942108d5c7034b0ca63020920c0358ca7d70387cbbb2a917544d6"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=1000&q=80",
+        "mime": "image/jpeg",
+        "size": 139072,
+        "sha256": "37d55328379e40f97f8040f327196830373537e31a69dc93c0db22ef235fcc66"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1000&q=80",
+        "mime": "image/jpeg",
+        "size": 232762,
+        "sha256": "8851fc67a8e86bd99a3648847d6aa68b58c247224c42c7e61c258ff95bce5279"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=80",
+        "mime": "image/jpeg",
+        "size": 86175,
+        "sha256": "a8118d807a7fe7b2fec39dd3e499f3cc0dc22c39dd612d93bf9c713ce804a602"
+      }
+    ],
+    "consoleErrors": []
+  },
+  "recovery_preflight_cases": 3,
+  "runtime": {
+    "php": "8.3.6",
+    "mariadb": "10.11.14",
+    "transport": "browser requests routed to loopback PHP; no mocked API response bodies; no production API traffic"
+  },
+  "production_changed": false,
+  "real_administrator_password_used": false,
+  "frontend_publication_source": "approved-static",
+  "verdict_compatibility": "GO corrected frontend + exact supplied backend",
+  "production_release": "not executed or authorized by this validation"
+}

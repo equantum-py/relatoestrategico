@@ -36,7 +36,7 @@ window.RelatoContent = (() => {
     const blocks = page.blocks.map(block => {
       const key = block.block_key;
       const entry = blockCatalog[key];
-      const custom = typeof key === "string" && key.startsWith(page.key + ".custom.") && /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/.test(key.slice((page.key + ".custom.").length));
+      const custom = typeof key === "string" && key.startsWith(page.key + ".custom.") && /^[a-f0-9]{16}$/.test(key.slice((page.key + ".custom.").length));
       if ((!entry && !custom) || (entry && entry.page !== page.key) || active.has(key)) throw new Error("Identidad de bloque no válida");
       active.add(key);
       const content = {};

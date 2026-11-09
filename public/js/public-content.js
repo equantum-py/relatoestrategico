@@ -48,7 +48,7 @@
       if (!Object.hasOwn(selectors, name) || typeof value !== "string") continue;
       let target = resolve(node, selectors[name]);
       if (!target && value && !["url","image_url"].includes(name) && selectors[name] !== false) {
-        target = document.createElement(name === "button" ? "a" : "p");
+        target = document.createElement(name === "title" ? "h3" : name === "button" ? "a" : "p");
         node.append(target);
       }
       if (!target && name === "image_url" && C.safeURL(value)) {

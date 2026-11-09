@@ -50,6 +50,17 @@ function fmtBytes(n) {
 function isSafeLink(url) {
   return /^https:\/\/[^\s<>"']+$/i.test(url) || /^\/(?![/\\])[A-Za-z0-9/_.-]*$/.test(url);
 }
+// El PHP mantiene los archivos sin publicar en almacenamiento privado.
+function adminImageURL(value) {
+  const url = String(value || "");
+  const privatePath = /^\/v1\/media\/[a-f0-9]{32}\.(?:jpg|png|webp)\/file$/;
+  if (privatePath.test(url)) return API + url;
+  if (url.startsWith(API + "/media/")) {
+    const stored = url.slice((API + "/media/").length);
+    if (/^[a-f0-9]{32}\.(?:jpg|png|webp)$/.test(stored)) return API + "/v1/media/" + stored + "/file";
+  }
+  return isSafeLink(url) ? url : "";
+}
 function alertBox(message, kind = "error") {
   if (!message) return "";
   return `<div class="alert ${kind}" role="${kind === "error" ? "alert" : "status"}">${esc(message)}</div>`;
@@ -560,7 +571,7 @@ async function renderBlockEditor(root) {
     box.replaceChildren();
     if (x.image_url && isSafeLink(x.image_url)) {
       const img = document.createElement("img");
-      img.src = x.image_url;
+      img.src = adminImageURL(x.image_url);
       img.alt = "";
       img.referrerPolicy = "no-referrer";
       box.appendChild(img);
@@ -724,7 +735,7 @@ async function renderPostEditor(root) {
     box.replaceChildren();
     if (x.image_url && isSafeLink(x.image_url)) {
       const img = document.createElement("img");
-      img.src = x.image_url;
+      img.src = adminImageURL(x.image_url);
       img.alt = "";
       img.referrerPolicy = "no-referrer";
       box.appendChild(img);
@@ -810,7 +821,7 @@ async function renderMedia(root) {
     <div class="media-grid">
       ${media.length ? media.map((m) => `
         <div class="media-card">
-          <img src="${esc(m.url)}" alt="${esc(m.original_name)}" loading="lazy" referrerpolicy="no-referrer">
+          <img src="${esc(adminImageURL(m.preview || m.url))}" alt="${esc(m.original_name)}" loading="lazy" referrerpolicy="no-referrer">
           <div class="meta">
             <strong>${esc(m.original_name)}</strong>
             <span class="muted">${m.width}×${m.height} · ${esc(fmtBytes(m.size_bytes))}</span>

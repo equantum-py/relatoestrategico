@@ -47,6 +47,20 @@ if (stripos($dbName, 'test') === false) {
 $secret = bin2hex(random_bytes(32));
 $mediaDir = sys_get_temp_dir() . '/relato-media-test-' . bin2hex(random_bytes(4));
 mkdir($mediaDir, 0700, true);
+$mailDir = sys_get_temp_dir() . '/relato-mail-test-' . bin2hex(random_bytes(4));
+mkdir($mailDir, 0700, true);
+$logDir = sys_get_temp_dir() . '/relato-srvlog-' . bin2hex(random_bytes(4));
+mkdir($logDir, 0700, true);
+$serverLogFile = $logDir . '/server.log';
+touch($serverLogFile);
+chmod($serverLogFile, 0600);
+register_shutdown_function(static function () use ($mailDir, $logDir): void {
+    foreach (array_merge(glob($mailDir . '/*') ?: [], glob($logDir . '/*') ?: []) as $f) {
+        @unlink($f);
+    }
+    @rmdir($mailDir);
+    @rmdir($logDir);
+});
 
 function writeConfig(array $app): string
 {
@@ -71,8 +85,12 @@ $appBase = [
     'account_attempts_per_hour' => 50,
     'reset_minutes' => 30,
     'reset_per_account_per_hour' => 3,
+    'reset_per_ip_per_hour' => 1000,
     'trusted_proxies' => [],
     'media_dir' => $mediaDir,
+    'environment' => 'test',
+    'mail_transport' => 'file',
+    'mail_test_dir' => $mailDir,
     'media_base_url' => 'https://api.relatoestrategico.cl/media',
     'media_max_bytes' => 5242880,
 ];
@@ -95,6 +113,7 @@ $pdo = new PDO("mysql:host=127.0.0.1;dbname={$dbName};charset=utf8mb4", $dbUser,
 
 function startServer(int $port, string $cfg, string $apiDir, array $env): array
 {
+    global $serverLogFile;
     // Un puerto ocupado significa un servidor huérfano: no probar contra él.
     $busy = @fsockopen('127.0.0.1', $port, $errno, $errstr, 0.5);
     if ($busy !== false) {
@@ -103,8 +122,8 @@ function startServer(int $port, string $cfg, string $apiDir, array $env): array
         exit(2);
     }
     $proc = proc_open(
-        [PHP_BINARY, '-S', '127.0.0.1:' . $port, '-t', $apiDir, $apiDir . '/index.php'],
-        [1 => ['file', '/dev/null', 'w'], 2 => ['file', '/dev/null', 'w']],
+        [PHP_BINARY, '-d', 'log_errors=1', '-d', 'error_log=' . $serverLogFile, '-S', '127.0.0.1:' . $port, '-t', $apiDir, $apiDir . '/index.php'],
+        [1 => ['file', '/dev/null', 'w'], 2 => ['file', $serverLogFile, 'a']],
         $pipes,
         null,
         array_merge($env, ['RELATO_CONFIG' => $cfg])
@@ -756,6 +775,163 @@ check('Panel: sin scripts inline', preg_match('#<script(?![^>]*\ssrc=)[^>]*>#i',
 check('Panel: app.js existe', is_file($adminHtml . '/app.js'));
 $vercel = (string) @file_get_contents(dirname($adminHtml, 2) . '/vercel.json');
 check('vercel.json envía CSP al panel', str_contains($vercel, "/admin/") && str_contains($vercel, 'Content-Security-Policy'));
+
+echo "\n== Correo: invitaciones y recuperación con transporte de prueba ==\n";
+$plainTokens = [];
+$mailMessages = static function () use ($mailDir): array {
+    $out = [];
+    foreach (glob($mailDir . '/*.eml') ?: [] as $f) {
+        $out[] = (string) file_get_contents($f);
+    }
+    return $out;
+};
+$findMail = static function (string $to, array $msgs): ?string {
+    $found = null;
+    foreach ($msgs as $m) {
+        if (str_starts_with($m, 'To: ' . $to . "\r\n")) {
+            $found = $m; // el más reciente
+        }
+    }
+    return $found;
+};
+$tokenIn = static function (?string $mail): ?string {
+    return ($mail !== null && preg_match('#\?reset=([a-f0-9]{64})#', $mail, $mm) === 1) ? $mm[1] : null;
+};
+$rowFor = static function (string $tok) use ($pdo): array {
+    $st = $pdo->prepare('SELECT user_id, used_at, expires_at, created_at FROM password_resets WHERE token_hash = ?');
+    $st->execute([hash('sha256', $tok)]);
+    return $st->fetch() ?: [];
+};
+$csrfHdr = static fn (): array => ['X-CSRF-Token: ' . csrf()];
+$confirm = static function (string $tok, string $pw) use ($csrfHdr): array {
+    return req('POST', '/v1/auth/password-reset/confirm', ['token' => $tok, 'password' => $pw], $csrfHdr());
+};
+$requestReset = static function (string $email) use ($csrfHdr): array {
+    return req('POST', '/v1/auth/password-reset/request', ['email' => $email], $csrfHdr());
+};
+
+// La recuperación del administrador revoca sus sesiones: se inicia sesión de nuevo con la contraseña nueva.
+$adminAgain = login(ADMIN_EMAIL, NEW_PASSWORD);
+$HM = authHeaders((string) cookieFrom($adminAgain), (string) ($adminAgain['json']['csrf'] ?? ''));
+$mailUser = 'correo.pruebas@relato.test';
+$created = req('POST', '/v1/users', ['email' => $mailUser, 'role' => 'reader'], $HM);
+check('Usuario de prueba creado para flujos por correo (201)', $created['status'] === 201);
+$mailUserId = (int) ($created['json']['user']['id'] ?? 0);
+
+$invMsg = $findMail($mailUser, $mailMessages());
+$invTok = $tokenIn($invMsg);
+check('Invitación: correo generado en el transporte de prueba', $invMsg !== null && str_contains($invMsg, 'Te invitaron'));
+check('Invitación: enlace con token de 64 hex', $invTok !== null);
+if ($invTok !== null) {
+    $plainTokens[] = $invTok;
+    $ir = $rowFor($invTok);
+    check('Invitación: token guardado solo como hash, sin usar, del usuario correcto',
+        $ir !== [] && $ir['used_at'] === null && (int) $ir['user_id'] === $mailUserId);
+    $ttl = strtotime((string) $ir['expires_at'] . ' UTC') - time();
+    check('Invitación: vigencia de 30 minutos', $ttl > 29 * 60 && $ttl <= 30 * 60 + 5, (string) $ttl);
+}
+$ACCEPT_PW = 'Acc-' . bin2hex(random_bytes(10)) . '-9z';
+$RESET_PW = 'Res-' . bin2hex(random_bytes(10)) . '-9z';
+$acc = $invTok !== null ? $confirm($invTok, $ACCEPT_PW) : ['status' => 0];
+check('Invitación: el enlace crea la contraseña (200)', $acc['status'] === 200);
+$accAgain = $invTok !== null ? $confirm($invTok, OTHER_PASSWORD) : ['status' => 0];
+check('Invitación: el enlace no se puede reutilizar (400)', $accAgain['status'] === 400);
+check('Invitación: inicio de sesión con la contraseña creada', login($mailUser, $ACCEPT_PW)['status'] === 200);
+
+echo "\n== Recuperación de contraseña por correo ==\n";
+$before = count($mailMessages());
+$r1 = $requestReset($mailUser);
+check('Recuperación: respuesta 200', $r1['status'] === 200);
+$recMsg = $findMail($mailUser, $mailMessages());
+$recTok = $tokenIn($recMsg);
+check('Recuperación: correo nuevo con enlace distinto al de invitación',
+    $recTok !== null && $recTok !== $invTok && count($mailMessages()) === $before + 1);
+if ($recTok !== null) {
+    $plainTokens[] = $recTok;
+}
+$rc = $recTok !== null ? $confirm($recTok, $RESET_PW) : ['status' => 0];
+check('Recuperación: el enlace cambia la contraseña (200)', $rc['status'] === 200);
+check('Recuperación: la contraseña anterior deja de funcionar', login($mailUser, $ACCEPT_PW)['status'] === 401);
+check('Recuperación: la contraseña nueva funciona', login($mailUser, $RESET_PW)['status'] === 200);
+$rcAgain = $recTok !== null ? $confirm($recTok, OTHER_PASSWORD) : ['status' => 0];
+check('Recuperación: el enlace es de un solo uso (400)', $rcAgain['status'] === 400);
+
+$beforeUnknown = count($mailMessages());
+$unk = $requestReset('desconocido.pruebas@relato.test');
+check('Correo desconocido: misma respuesta que una cuenta existente',
+    $unk['status'] === 200 && ($unk['json']['message'] ?? null) === ($r1['json']['message'] ?? '#'));
+check('Correo desconocido: no se envía ningún mensaje', count($mailMessages()) === $beforeUnknown);
+
+// Segundo enlace: dentro del límite (invitación + recuperación = 2 de 3 por hora).
+$r2 = $requestReset($mailUser);
+$expTok = $tokenIn($findMail($mailUser, $mailMessages()));
+check('Segundo enlace dentro del límite por cuenta (3/h)', $r2['status'] === 200 && $expTok !== null && $expTok !== $recTok);
+if ($expTok !== null) {
+    $plainTokens[] = $expTok;
+    $er = $rowFor($expTok);
+    $ttl2 = strtotime((string) $er['expires_at'] . ' UTC') - time();
+    check('Segundo enlace: vigencia de 30 minutos', $ttl2 > 29 * 60 && $ttl2 <= 30 * 60 + 5, (string) $ttl2);
+    $pdo->prepare('UPDATE password_resets SET expires_at = ? WHERE token_hash = ?')
+        ->execute([gmdate('Y-m-d H:i:s', time() - 60), hash('sha256', $expTok)]);
+    $vencido = $confirm($expTok, OTHER_PASSWORD);
+    check('Enlace vencido no cambia la contraseña (400)', $vencido['status'] === 400);
+    check('Enlace vencido: la contraseña sigue siendo la de recuperación', login($mailUser, $RESET_PW)['status'] === 200);
+}
+
+// Tercer intento en la misma hora: límite por cuenta, sin correo y misma respuesta.
+$beforeLimit = count($mailMessages());
+$r3 = $requestReset($mailUser);
+check('Límite por cuenta: sin correo adicional y respuesta genérica',
+    count($mailMessages()) === $beforeLimit && $r3['status'] === 200 && ($r3['json']['message'] ?? null) === ($r1['json']['message'] ?? '#'));
+
+check('Permisos de los mensajes de prueba: 0600',
+    ($files = glob($mailDir . '/*.eml')) !== [] && array_unique(array_map(fn ($f) => fileperms($f) & 0777, $files)) === [0600]);
+check('Directorio de correos de prueba: 0700', (fileperms($mailDir) & 0777) === 0700);
+
+echo "\n== Guardas del transporte de prueba (subprocesos) ==\n";
+$guardCode = "require '{$appDir}/src/Config.php'; require '{$appDir}/src/Mailer.php'; Config::load(); "
+    . "exit(Mailer::send('x@ejemplo.test', 'Prueba', 'cuerpo', 'From: no-reply@relatoestrategico.cl') ? 0 : 3);";
+$worldDir = sys_get_temp_dir() . '/relato-mail-open-' . bin2hex(random_bytes(4));
+mkdir($worldDir, 0755, true);
+$base = ['db' => $dbHost, 'app' => $appBase];
+$guards = [
+    'Producción con transporte file: rechazado al cargar la configuración' => [
+        array_merge($base, ['app' => array_merge($appBase, ['environment' => 'production', 'mail_transport' => 'file'])]), false],
+    'Transporte desconocido: rechazado' => [
+        array_merge($base, ['app' => array_merge($appBase, ['mail_transport' => 'smtp'])]), false],
+    'Directorio dentro de public-api: rechazado' => [
+        array_merge($base, ['app' => array_merge($appBase, ['mail_test_dir' => $apiDir])]), false],
+    'Directorio con permisos 0755: rechazado' => [
+        array_merge($base, ['app' => array_merge($appBase, ['mail_test_dir' => $worldDir])]), false],
+    'Configuración de prueba válida: se escribe el mensaje' => [
+        $base, true],
+];
+foreach ($guards as $label => [$cfgArr, $shouldWork]) {
+    $cfgPath = writeConfig($cfgArr);
+    $apiBefore = count(glob($apiDir . '/*.eml') ?: []);
+    $p = proc_open([PHP_BINARY, '-r', $guardCode], [1 => ['file', '/dev/null', 'w'], 2 => ['file', '/dev/null', 'w']], $pp, null, array_merge(getenv(), ['RELATO_CONFIG' => $cfgPath]));
+    $code = proc_close($p);
+    @unlink($cfgPath);
+    $ok = $shouldWork ? $code === 0 : $code !== 0;
+    check($label, $ok, "salida {$code}");
+    check($label . ' (sin archivos en el directorio público)', count(glob($apiDir . '/*.eml') ?: []) === $apiBefore);
+}
+rmdir($worldDir);
+
+echo "\n== Ausencia de tokens y contraseñas en registros ==\n";
+$secretsToCheck = array_merge($plainTokens, [$ACCEPT_PW, $RESET_PW, NEW_PASSWORD, ADMIN_PASSWORD, OTHER_PASSWORD, $secret]);
+$serverLog = (string) @file_get_contents($serverLogFile);
+check('Registro del servidor disponible y con actividad (control de la revisión)', is_file($serverLogFile) && filesize($serverLogFile) > 0);
+$auditAll = implode(' ', array_map('json_encode', $pdo->query('SELECT * FROM audit_log')->fetchAll()));
+$loginAll = implode(' ', array_map('json_encode', $pdo->query('SELECT * FROM login_attempts')->fetchAll()));
+$leak = false;
+foreach ($secretsToCheck as $sec) {
+    if ($sec !== '' && (str_contains($serverLog, $sec) || str_contains($auditAll, $sec) || str_contains($loginAll, $sec))) {
+        $leak = true;
+    }
+}
+check('Ni tokens ni contraseñas aparecen en registro del servidor, auditoría ni intentos', !$leak);
+check('Las pruebas de correo sí dejaron mensajes en el transporte de prueba', count($mailMessages()) >= 5);
 
 /* ---------------- ausencia de credenciales expuestas ---------------- */
 

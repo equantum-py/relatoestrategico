@@ -20,6 +20,9 @@ return [
         'allowed_origin' => 'https://relatoestrategico.cl',
         'site_url' => 'https://relatoestrategico.cl',
         'mail_from' => 'no-reply@relatoestrategico.cl',
+        // production: entorno real. mail_transport "file" solo se acepta con environment = test (pruebas).
+        'environment' => 'production',
+        'mail_transport' => 'mail',
         'session_idle_minutes' => 30,
         'session_max_hours' => 8,
         // Intentos fallidos por par IP+cuenta en 15 min (bloqueo acotado a esa conexión).
@@ -30,6 +33,7 @@ return [
         'reset_minutes' => 30,
         // Enlaces de recuperación o invitación por cuenta y hora.
         'reset_per_account_per_hour' => 3,
+        'reset_per_ip_per_hour' => 5,
         // Proxies de confianza (IP). Vacío = usar REMOTE_ADDR. Solo listar proxies controlados por el hosting.
         'trusted_proxies' => [],
         // Biblioteca multimedia: carpeta pública de imágenes y su URL base.

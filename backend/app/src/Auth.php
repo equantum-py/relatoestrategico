@@ -173,7 +173,7 @@ final class Auth
             ($invitation ? 'Invitación al' : 'Recuperar contraseña ·') . ' Panel Relato Estratégico',
             'UTF-8'
         );
-        if (!@mail($email, $subject, $body, $headers)) {
+        if (!Mailer::send($email, $subject, $body, $headers)) {
             error_log('[relato-api] Falló el envío del correo de acceso.');
         }
         Security::logEvent($invitation ? 'invitation_sent' : 'reset_requested', $uid);
@@ -194,7 +194,7 @@ final class Auth
             "SELECT COUNT(*) FROM audit_log WHERE event = 'reset_requested' AND ip_hash = ? AND created_at >= ?"
         );
         $st->execute([Security::ipHash(), Db::now(-3600)]);
-        if ((int) $st->fetchColumn() >= 5) {
+        if ((int) $st->fetchColumn() >= (int) Config::app('reset_per_ip_per_hour', 5)) {
             Security::logEvent('reset_throttled', null);
             Http::ok(['message' => self::RESET_MESSAGE]);
         }

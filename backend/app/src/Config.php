@@ -38,6 +38,17 @@ final class Config
         if (strlen($secret) < 48 || str_contains($secret, 'CAMBIAR')) {
             throw new RuntimeException('app.secret no es válido (mínimo 48 caracteres aleatorios).');
         }
+        $environment = (string) ($cfg['app']['environment'] ?? 'production');
+        $transport = (string) ($cfg['app']['mail_transport'] ?? 'mail');
+        if (!in_array($environment, ['production', 'test'], true)) {
+            throw new RuntimeException('app.environment debe ser production o test.');
+        }
+        if (!in_array($transport, ['mail', 'file'], true)) {
+            throw new RuntimeException('app.mail_transport debe ser mail o file.');
+        }
+        if ($transport === 'file' && $environment !== 'test') {
+            throw new RuntimeException('El transporte de correo de prueba solo puede usarse con app.environment = test.');
+        }
         if (!preg_match('#^https://[a-z0-9.-]+$#i', (string) ($cfg['app']['allowed_origin'] ?? ''))) {
             throw new RuntimeException('app.allowed_origin debe ser un origen https exacto.');
         }

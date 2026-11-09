@@ -14,6 +14,7 @@ require_once __DIR__ . '/Http.php';
 require_once __DIR__ . '/Security.php';
 require_once __DIR__ . '/Validate.php';
 require_once __DIR__ . '/Session.php';
+require_once __DIR__ . '/Mailer.php';
 require_once __DIR__ . '/Auth.php';
 require_once __DIR__ . '/Content.php';
 require_once __DIR__ . '/Pages.php';

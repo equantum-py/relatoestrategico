@@ -62,9 +62,20 @@ La aplicación nunca necesita `CREATE`, `ALTER`, `DROP` ni `GRANT`.
 
 - Un administrador crea cuentas desde **Usuarios y roles**. La cuenta nueva no recibe contraseña elegida por el administrador:
   se envía un enlace de un solo uso (30 min) para que la persona cree su propia contraseña.
-- Límite: 3 enlaces por cuenta por hora. Si se supera, la cuenta se crea igualmente y el panel indica que el enlace no se envió.
+- Límite: 3 enlaces por cuenta por hora (`reset_per_account_per_hour`) y 5 solicitudes de recuperación por IP por hora (`reset_per_ip_per_hour`). Si se supera, la respuesta es la misma que para una cuenta válida y no se envía correo.
 - Cambiar el rol o desactivar una cuenta cierra todas sus sesiones abiertas.
 - Siempre debe quedar al menos un administrador activo.
+
+## Correo (invitaciones y recuperación)
+
+- Producción usa `mail()` de PHP (`app.mail_transport = 'mail'`). El servidor debe poder enviar desde `app.mail_from` (`no-reply@relatoestrategico.cl`).
+- Antes de habilitar recuperación, verificar en cPanel: SPF y DKIM del dominio, DMARC si se usa, y entrega a una cuenta de prueba **real y propia**.
+- Si `mail()` falla, el envío devuelve error al registro del servidor y el panel no lo muestra al usuario. Revisar el registro tras la primera prueba.
+- `app.mail_transport = 'file'` existe **solo para pruebas**: guarda cada mensaje como archivo `.eml` (0600) en `app.mail_test_dir`, sin enviarlo.
+  - Solo se acepta con `app.environment = 'test'`. Con cualquier otro valor la configuración se rechaza al cargar.
+  - `mail_test_dir` debe ser una ruta absoluta, fuera de cualquier directorio público (`public_html`, `public-api`) y con permisos 0700.
+  - Nunca debe activarse en `config.php` de producción.
+- Los tokens nunca se escriben en el registro del servidor, en la auditoría ni en los intentos de acceso (verificado en la suite).
 
 ## Respaldo y restauración
 
@@ -124,4 +135,5 @@ respaldo y restauración, recuperación de contraseña, CSP del panel y ausencia
 - La suite se ejecutó con PHP 8.3.6 y MariaDB 10.11. **No se ejecutó con PHP 8.2** en el entorno de desarrollo.
 - No se verificó contra el servidor LiteSpeed real de cPanel ni contra el certificado HTTPS de `api.relatoestrategico.cl`,
   porque ese dominio no era accesible desde el entorno de desarrollo. Tampoco se verificó la entrega de correo de invitaciones y recuperación.
+- La entrega real de correo en cPanel no se ha probado: la suite usa el transporte de archivos, no `mail()`.
 - Las cabeceras de `vercel.json` deben comprobarse en el panel publicado tras el primer despliegue.

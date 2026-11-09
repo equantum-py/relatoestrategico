@@ -9,36 +9,36 @@
     if (!node) return;
     bindings.set(key, {node, fields});
   }
-  function group(key, selector, offset = 0) {
-    all(selector).forEach((n, i) => bind(`${key}-${i + offset}`, n));
+  function group(keys, selector) {
+    all(selector).forEach((node, index) => { if (keys[index]) bind(keys[index], node); });
   }
-  bind("home-0", $(".intro"));
-  ["soluciones", "servicios", "resultados", "nosotros", "blog", "contacto"].forEach((id, i) => bind(`home-${i + 1}`, $("#" + id)));
-  group("servicios", ".home-service-card");
-  group("preguntas", ".faq-list details");
-  group("resultados", ".result-proof, .published-slide");
-  bind("resultados-4", $(".results-footer"));
+  bind("home.hero", $(".intro"));
+  [["home.solutions","soluciones"],["home.services","servicios"],["home.results","resultados"],["home.about","nosotros"],["home.blog","blog"],["home.contact","contacto"]].forEach(([key,id]) => bind(key, $("#" + id)));
+  group(["servicios.linkedin-start", "servicios.linkedin-pro", "servicios.linkedin-elite", "servicios.workshop"], ".home-service-card");
+  group(["preguntas.audience", "preguntas.self-service", "preguntas.pricing", "preguntas.dedication", "preguntas.voice", "preguntas.timeframe", "preguntas.followers", "preguntas.opportunities"], ".faq-list details");
+  group(["resultados.interactions", "resultados.impressions", "resultados.followers", "resultados.recognition"], ".result-proof, .published-slide");
+  bind("resultados.evidence", $(".results-footer"));
   const bio = $("#nosotros .rodrigo-new > div, #rodrigo .rodrigo-new > div");
-  bind("nosotros-0", bio);
-  bind("nosotros-1", $(".rodrigo-photo"), {image_url: "img", title: false, description: "figcaption"});
-  group("nosotros", ".ruta-grid > article, .method-flow > .method-item", 2);
+  bind("nosotros.biography", bio);
+  bind("nosotros.portrait", $(".rodrigo-photo"), {image_url: "img", title: false, description: "figcaption"});
+  group(["nosotros.ruta-review", "nosotros.ruta-unify", "nosotros.ruta-translate", "nosotros.ruta-activate"], ".ruta-grid > article, .method-flow > .method-item");
   // Soluciones conserva el diseño de dos columnas; cada unidad es un encabezado y su texto.
   all(".problem-layout h3").slice(0, 3).forEach((h, i) => {
     const wrap = document.createElement("div");
     h.before(wrap); wrap.append(h); if (wrap.nextElementSibling?.tagName === "P") wrap.append(wrap.nextElementSibling);
-    bind(`soluciones-${i}`, wrap);
+    bind(["soluciones.career","soluciones.business","soluciones.authority"][i], wrap);
   });
   // Datos de contacto usan nodos propios para no alterar todos los enlaces de una sección.
   const contactNodes = all(".contact-methods > div");
-  const contacts = [[1, 0, 'a[href*="wa.me/"]'], [0, 1, 'a[href^="mailto:"]'], [2, 3, 'a[href*="linkedin.com/in/"]'], [3, 4, 'a[href*="instagram.com/"]']];
+  const contacts = [[1, "contacto.whatsapp", 'a[href*="wa.me/"]'], [0, "contacto.email", 'a[href^="mailto:"]'], [2, "contacto.linkedin", 'a[href*="linkedin.com/in/"]'], [3, "contacto.instagram", 'a[href*="instagram.com/"]']];
   for (const [index, slot, selector] of contacts) {
     const node = contactNodes[index] || $("main " + selector)?.closest("p");
-    bind(`contacto-${slot}`, node, {title: "a", description: false, url: "a", button: "a"});
+    bind(slot, node, {title: "a", description: false, url: "a", button: "a"});
   }
-  bind("contacto-5", contactNodes[4] || $(".contact-card:last-child > p:last-child"), {title: contactNodes[4] ? "span:last-child" : ":self", description: false});
+  bind("contacto.location", contactNodes[4] || $(".contact-card:last-child > p:last-child"), {title: contactNodes[4] ? "span:last-child" : ":self", description: false});
   // Agenda no está entre los cinco datos de Home: enlaza su CTA sin reescribir el contenedor.
   const agenda = $("#contacto .contact-ctas a, .contact-actions a");
-  bind("contacto-2", agenda, {title: false, description: false, button: ":self", url: ":self"});
+  bind("contacto.calendar", agenda, {title: false, description: false, button: ":self", url: ":self"});
 
   function resolve(node, selector) { return selector === ":self" ? node : selector === false ? null : $(selector, node); }
   function patch(binding, content) {
@@ -72,8 +72,8 @@
     }
     const groups = new Map();
     for (const block of page.blocks) {
-      let binding = bindings.get(block.template_key);
-      if (!binding && block.template_key === null) {
+      let binding = bindings.get(block.block_key);
+      if (!binding && block.block_key.includes(".custom.")) {
         const node = document.createElement("article"); node.className = "card";
         const container = $("main .section-inner, main");
         if (!container) continue;
@@ -122,7 +122,11 @@
   }
   async function homePosts() {
     const grid = $(".editorial-grid"); if (!grid) return;
-    const posts = await C.posts();
+    if (!await C.usePublicAPI()) return;
+    grid.replaceChildren();
+    let posts;
+    try { posts = await C.posts(); }
+    catch { const notice = document.createElement("p"); notice.textContent = "Artículos no disponibles temporalmente."; grid.append(notice); return; }
     const rows = C.postRows(posts).slice(0, 3);
     const templates = all(".editorial-card", grid);
     const fragment = document.createDocumentFragment();

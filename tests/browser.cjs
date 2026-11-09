@@ -23,6 +23,7 @@ const path=require('node:path');
  const context=await browser.newContext();
  let role="admin",session=false,offline=false,posts=[],nextId=1,logoutFails=false;
  const pages=[{key:'home',label:'Inicio',description:'Página inicial',blocks:[{id:1,template_key:'home-0',title:'Portada',subtitle:'',description:'',button:'',url:'',image_url:'',visible:true,sort_order:1}]}];
+ await context.route('**/js/content-api.js',route=>route.fulfill({status:200,contentType:'application/javascript',body:fs.readFileSync('public/js/content-api.js','utf8').replace('const publicationSource = "approved-static";','const publicationSource = "api";')}));
  const calls=[];const publicPages=require('./fixtures/public-pages.json');
  await context.route('https://api.relatoestrategico.cl/**',async route=>{
   const req=route.request(),url=new URL(req.url()),p=url.pathname,m=req.method();

@@ -76,8 +76,9 @@ if(slug){
  document.querySelectorAll('[data-filter]').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw()}));search.addEventListener('input',draw);draw();
 }
 }
-renderBlog(fallbackPosts);
+if(!RelatoContent.apiMode) renderBlog(fallbackPosts);
 (async()=>{
+ if(!await RelatoContent.usePublicAPI()) return;
  const items=await RelatoContent.posts();
  const rows=RelatoContent.postRows(items);
  const selected=new URLSearchParams(location.search).get('articulo');
@@ -91,5 +92,5 @@ renderBlog(fallbackPosts);
   }
  }
  renderBlog(rows);
-})().catch(()=>{/* Respaldo editorial estático solo si la API no está disponible. */});
+})().catch(()=>{if(RelatoContent.apiMode)app.innerHTML='<div class="mast"><h1>Artículos no disponibles temporalmente</h1><a class="back" href="/blog/">Volver al blog →</a></div>';});
 </script><script src="/js/public-content.js" defer></script></body></html>

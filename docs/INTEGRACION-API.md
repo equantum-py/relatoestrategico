@@ -1,5 +1,7 @@
 # Integración frontend + API — revisión
 
+> Estado vigente de este cierre: [CIERRE-P0-PR5.md](CIERRE-P0-PR5.md). Las descripciones de identidad por IDs/títulos de este documento corresponden a la revisión anterior y quedaron sustituidas por el contrato estable propuesto.
+
 **Cierre de aceptación:** [Informe PR #5](ACEPTACION-PR5.md). Dictamen vigente: **NO GO para fusión y despliegue**; ver defectos, resultados y accesos pendientes en ese informe.
 
 Base: `main` `bb6607755c30659e7d2521dd4a6ce1a619a509ed`.

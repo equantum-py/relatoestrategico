@@ -35,11 +35,11 @@ const {chromium}=require('playwright');
    const name=(route==='/'?'home':route.replaceAll('/',''))+'-'+width;
    await p.screenshot({path:path.join(output,name+'.png'),fullPage:true,animations:'disabled'});
    results.push({route,width,overflow:false,heading:await p.locator('h1').first().innerText()});console.log('PASS snapshot '+route+' '+width);
-   if(route==='/'){assert.equal(await p.locator('.editorial-card').count(),0);assert.match(await p.locator('.editorial-grid').innerText(),/Próximamente/);}
-   if(route==='/blog/'){assert.equal(await p.locator('#grid .card').count(),0);}
+   if(route==='/')assert.equal(await p.locator('.editorial-card').count(),3);
+   if(route==='/blog/')assert.equal(await p.locator('#grid .card').count(),6);
   }
   assert.deepEqual(errors,[]);
-  fs.writeFileSync(path.join(output,'results.json'),JSON.stringify({scope:'local PR + real public GET snapshot; not deployed/authenticated acceptance',views:results,served,consoleErrors:errors,observedRisk:'API contains zero published posts; approved static blog cards disappear on successful API response'},null,2));
-  console.log(JSON.stringify({views:results.length,served,consoleErrors:errors.length,output,blogEmpty:true}));
+  fs.writeFileSync(path.join(output,'results.json'),JSON.stringify({scope:'local PR + real public GET snapshot; not deployed/authenticated acceptance',views:results,served,consoleErrors:errors,publicationSource:'approved-static',observedRisk:'Legacy API lacks stable block keys; dynamic block updates remain gated; static blog is preserved until approved cutover'},null,2));
+  console.log(JSON.stringify({views:results.length,served,consoleErrors:errors.length,output,blogEmpty:false}));
  }finally{if(browser)await browser.close();server.close();}
 })().catch(e=>{console.error(e);process.exit(1)});

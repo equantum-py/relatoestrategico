@@ -25,13 +25,18 @@ test('fallo de API preserva copy, imágenes y CSS aprobados',async()=>{
   await vm.runInContext(publicCode,c);
   assert.deepEqual([...c.document.querySelectorAll('h1,h2,h3,p,img,style')].map(n=>n.outerHTML),before);
 });
-test('ediciones usan binding estable; ocultación, orden y texto seguro',async()=>{
-  const c=context('/servicios','public/servicios/index.html',async(url)=>({ok:true,json:async()=>url.includes('/pages/servicios')?{ok:true,page:{blocks:[{template_key:'servicios-2',content:{title:'Nuevo <script>texto</script>'}},{template_key:'servicios-0',content:{description:'Descripción editada'}}],disabled_keys:['servicios-1']}}:url.includes('/pages/')?{ok:true,page:{blocks:[],disabled_keys:[]}}:{ok:true,settings:{}}}));
+test('ediciones usan binding semántico; ocultación, orden y texto seguro',async()=>{
+  const pages=require('./fixtures/public-pages.json');
+  const page={...pages.servicios,identity_schema:'relato.block-key.v1',blocks:[
+    {...pages.servicios.blocks[2],block_key:'servicios.linkedin-elite',id:800,title:'Nuevo <script>texto</script>'},
+    {...pages.servicios.blocks[0],block_key:'servicios.linkedin-start',id:900,description:'Descripción editada'},
+    {...pages.servicios.blocks[3],block_key:'servicios.workshop',id:1000}
+  ]};
+  const c=context('/servicios','public/servicios/index.html',async(url)=>({ok:true,json:async()=>url.includes('/pages/servicios')?{ok:true,page}:url.includes('/pages/')?{ok:true,page:{blocks:[]}}:{ok:true,settings:{}}}));
   await vm.runInContext(publicCode,c);
   const cards=[...c.document.querySelectorAll('.home-service-card')];
   assert.equal(cards[0].querySelector('h3').textContent,'Nuevo <script>texto</script>');
-  assert.equal(cards[0].querySelector('script'),null);
-  assert.equal(cards[1].hidden,true);
+  assert.equal(cards[0].querySelector('script'),null);assert.equal(cards[1].hidden,true);
   assert.equal(cards[2].querySelector('p').textContent,'Descripción editada');
 });
 test('no hay persistencia administrativa en localStorage/sessionStorage',()=>{
@@ -44,12 +49,10 @@ test('todos los HTML con script inline tienen sintaxis válida',()=>{
   for(const f of files){const{document}=parseHTML(fs.readFileSync(f,'utf8'));for(const s of document.querySelectorAll('script:not([src])')) new vm.Script(s.textContent,{filename:f});}
 });
 
-test('contrato real de página: IDs estables, semilla intacta, ocultos ausentes',()=>{
- const c=context().RelatoContent;
- const page={key:'home',blocks:[{id:3,sort_order:1,title:'Servicios editados',subtitle:'',description:'',button:'',url:'',image_url:''},{id:1,sort_order:2,title:'Hero: Tu experiencia tiene valor',subtitle:'',description:'',button:'',url:'',image_url:''}]};
- const n=c.normalizePage(page);
- assert.equal(n.blocks[0].template_key,'home-2');assert.equal(n.blocks[0].content.title,'Servicios editados');
- assert.deepEqual(Object.keys(n.blocks[1].content),[]);assert.ok(n.disabled_keys.includes('home-1'));
+test('contrato legado sin identidad estable se rechaza incluso con IDs y títulos conocidos',()=>{
+ const c=context().RelatoContent;const pages=require('./fixtures/public-pages.json');
+ assert.throws(()=>c.normalizePage(pages.home),/identidad estable/);
+ assert.throws(()=>c.normalizePage({...pages.home,identity_schema:'relato.block-key.v1'}),/Identidad/);
 });
 test('paginación real: no pierde publicaciones posteriores a la primera página',async()=>{
  let calls=0;
@@ -57,14 +60,12 @@ test('paginación real: no pierde publicaciones posteriores a la primera página
  const rows=await c.posts();assert.equal(rows.length,3);assert.equal(calls,2);
 });
 
-test('semilla de contacto no reordena el diseño aprobado; orden explícito sí',async()=>{
- const pages=require('./fixtures/public-pages.json');
- const c=context('/',undefined,async(url)=>({ok:true,json:async()=>url.includes('/pages/')?{ok:true,page:pages[new URL(url).pathname.split('/').pop()]}:url.includes('/posts')?{ok:true,posts:[]}:{ok:true,settings:{}}}));
- assert.equal(c.RelatoContent.normalizePage(pages.contacto).order_changed,false);
- const reversed={...pages.contacto,blocks:[...pages.contacto.blocks].reverse()};
- assert.equal(c.RelatoContent.normalizePage(reversed).order_changed,true);
- await vm.runInContext(publicCode,c);
- assert.match(c.document.querySelector('.contact-methods > div').textContent,/Correo/);
- const firstBio=c.document.querySelector('.rodrigo-new').firstElementChild;
- assert.ok(firstBio.matches('figure'),'preserva fotografía antes de biografía');
+test('semilla con claves estables conserva contacto y biografía; orden explícito sí',async()=>{
+ const pages=require('./fixtures/public-pages.json');const manifest=require('../data/block-identity-bootstrap.json');
+ const keyed=Object.fromEntries(Object.entries(pages).map(([k,p])=>[k,{...p,identity_schema:'relato.block-key.v1',blocks:p.blocks.map(b=>({...b,block_key:manifest.bindings.find(x=>x.bootstrap_observed_id===b.id).block_key}))}]));
+ const c=context('/',undefined,async(url)=>({ok:true,json:async()=>url.includes('/pages/')?{ok:true,page:keyed[new URL(url).pathname.split('/').pop()]}:url.includes('/posts')?{ok:true,posts:[]}:{ok:true,settings:{}}}));
+ assert.equal(c.RelatoContent.normalizePage(keyed.contacto).order_changed,false);
+ assert.equal(c.RelatoContent.normalizePage({...keyed.contacto,blocks:[...keyed.contacto.blocks].reverse()}).order_changed,true);
+ await vm.runInContext(publicCode,c);assert.match(c.document.querySelector('.contact-methods > div').textContent,/Correo/);
+ assert.ok(c.document.querySelector('.rodrigo-new').firstElementChild.matches('figure'));
 });

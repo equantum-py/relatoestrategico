@@ -1,5 +1,7 @@
 # PR #5 — Informe de aceptación técnica
 
+> Estado vigente de este cierre: [CIERRE-P0-PR5.md](CIERRE-P0-PR5.md). Las descripciones de identidad por IDs/títulos de este documento corresponden a la revisión anterior y quedaron sustituidas por el contrato estable propuesto.
+
 **Dictamen: NO GO para autorizar fusión y despliegue.**
 
 Revisión solicitada sobre `40058fe3319f09543e02c343b9cc2448c0efa012`, exclusivamente en `integration/frontend-php-api`. Se agregó una corrección mínima para conservar el orden del diseño, pruebas diagnósticas y este informe. Sin otra rama, funcionalidades nuevas, fusión, despliegue, cambios de credenciales, creación de usuarios ni mutaciones de contenido productivo.

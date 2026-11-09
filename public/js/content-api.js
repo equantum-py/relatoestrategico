@@ -44,7 +44,9 @@ window.RelatoContent = (() => {
       }
       return {template_key, sort_order:block.sort_order, content};
     });
-    return {...page, blocks, disabled_keys:baseline.map((_,i)=>`${page.key}-${i}`).filter(k=>!active.has(k))};
+    const knownOrder = blocks.filter(b=>b.template_key !== null).map(b=>Number(b.template_key.split('-').pop()));
+    const order_changed = knownOrder.some((index,i)=>i>0 && index<knownOrder[i-1]);
+    return {...page, blocks, order_changed, disabled_keys:baseline.map((_,i)=>`${page.key}-${i}`).filter(k=>!active.has(k))};
   }
   async function posts() {
     const result = []; let offset = 0;

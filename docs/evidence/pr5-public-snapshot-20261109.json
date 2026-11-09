@@ -1,0 +1,116 @@
+{
+  "scope": "local PR + real public GET snapshot; not deployed/authenticated acceptance",
+  "views": [
+    {
+      "route": "/",
+      "width": 390,
+      "overflow": false,
+      "heading": "Tu tarea es ser experto.\nLa nuestra es hacerte visible en LinkedIn."
+    },
+    {
+      "route": "/servicios/",
+      "width": 390,
+      "overflow": false,
+      "heading": "Elige cuál de nuestras soluciones prefieres."
+    },
+    {
+      "route": "/resultados/",
+      "width": 390,
+      "overflow": false,
+      "heading": "No publicamos contenidos. ¡Creamos liderazgo y visibilidad en LinkedIn!"
+    },
+    {
+      "route": "/sobre-nosotros/",
+      "width": 390,
+      "overflow": false,
+      "heading": "¿Quién liderará tu transformación en LinkedIn?"
+    },
+    {
+      "route": "/como-trabajamos/",
+      "width": 390,
+      "overflow": false,
+      "heading": "Así trabajamos con el Método RUTA"
+    },
+    {
+      "route": "/soluciones/",
+      "width": 390,
+      "overflow": false,
+      "heading": "Tienes trayectoria. El problema es que LinkedIn no la muestra."
+    },
+    {
+      "route": "/preguntas/",
+      "width": 390,
+      "overflow": false,
+      "heading": "FAQ"
+    },
+    {
+      "route": "/contacto/",
+      "width": 390,
+      "overflow": false,
+      "heading": "Hablemos de tu posicionamiento en LinkedIn"
+    },
+    {
+      "route": "/blog/",
+      "width": 390,
+      "overflow": false,
+      "heading": "Noticias, tendencias y tips de LinkedIn"
+    },
+    {
+      "route": "/",
+      "width": 1440,
+      "overflow": false,
+      "heading": "Tu tarea es ser experto.\nLa nuestra es hacerte visible en LinkedIn."
+    },
+    {
+      "route": "/servicios/",
+      "width": 1440,
+      "overflow": false,
+      "heading": "Elige cuál de nuestras soluciones prefieres."
+    },
+    {
+      "route": "/resultados/",
+      "width": 1440,
+      "overflow": false,
+      "heading": "No publicamos contenidos. ¡Creamos liderazgo y visibilidad en LinkedIn!"
+    },
+    {
+      "route": "/sobre-nosotros/",
+      "width": 1440,
+      "overflow": false,
+      "heading": "¿Quién liderará tu transformación en LinkedIn?"
+    },
+    {
+      "route": "/como-trabajamos/",
+      "width": 1440,
+      "overflow": false,
+      "heading": "Así trabajamos con el Método RUTA"
+    },
+    {
+      "route": "/soluciones/",
+      "width": 1440,
+      "overflow": false,
+      "heading": "Tienes trayectoria. El problema es que LinkedIn no la muestra."
+    },
+    {
+      "route": "/preguntas/",
+      "width": 1440,
+      "overflow": false,
+      "heading": "FAQ"
+    },
+    {
+      "route": "/contacto/",
+      "width": 1440,
+      "overflow": false,
+      "heading": "Hablemos de tu posicionamiento en LinkedIn"
+    },
+    {
+      "route": "/blog/",
+      "width": 1440,
+      "overflow": false,
+      "heading": "Noticias, tendencias y tips de LinkedIn"
+    }
+  ],
+  "served": 50,
+  "consoleErrors": [],
+  "observedRisk": "API contains zero published posts; approved static blog cards disappear on successful API response"
+}

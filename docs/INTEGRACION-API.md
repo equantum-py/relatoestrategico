@@ -1,5 +1,7 @@
 # Integración frontend + API — revisión
 
+**Cierre de aceptación:** [Informe PR #5](ACEPTACION-PR5.md). Dictamen vigente: **NO GO para fusión y despliegue**; ver defectos, resultados y accesos pendientes en ese informe.
+
 Base: `main` `bb6607755c30659e7d2521dd4a6ce1a619a509ed`.
 Rama única: `integration/frontend-php-api`. No fusionar ni desplegar con este trabajo.
 

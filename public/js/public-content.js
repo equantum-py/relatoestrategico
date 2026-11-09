@@ -87,6 +87,7 @@
     }
     // Reordenar solo hermanos administrados: conserva títulos, controles y estructura.
     for (const [parent, ordered] of groups) {
+      if (page.order_changed === false) continue; // La semilla no reordena el diseño aprobado.
       if (ordered.length < 2) continue;
       const nodes = new Set(ordered), slots = [...parent.children].filter(n => nodes.has(n));
       const markers = slots.map(n => { const marker = document.createComment("content-slot"); n.replaceWith(marker); return marker; });

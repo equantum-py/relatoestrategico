@@ -56,3 +56,15 @@ test('paginación real: no pierde publicaciones posteriores a la primera página
  const c=context('/',undefined,async(url)=>({ok:true,json:async()=>{calls++;const offset=Number(new URL(url).searchParams.get('offset'));return{ok:true,posts:offset===0?[{id:1},{id:2}]:[{id:3}],pagination:{limit:2,offset,count:offset===0?2:1}};}})).RelatoContent;
  const rows=await c.posts();assert.equal(rows.length,3);assert.equal(calls,2);
 });
+
+test('semilla de contacto no reordena el diseño aprobado; orden explícito sí',async()=>{
+ const pages=require('./fixtures/public-pages.json');
+ const c=context('/',undefined,async(url)=>({ok:true,json:async()=>url.includes('/pages/')?{ok:true,page:pages[new URL(url).pathname.split('/').pop()]}:url.includes('/posts')?{ok:true,posts:[]}:{ok:true,settings:{}}}));
+ assert.equal(c.RelatoContent.normalizePage(pages.contacto).order_changed,false);
+ const reversed={...pages.contacto,blocks:[...pages.contacto.blocks].reverse()};
+ assert.equal(c.RelatoContent.normalizePage(reversed).order_changed,true);
+ await vm.runInContext(publicCode,c);
+ assert.match(c.document.querySelector('.contact-methods > div').textContent,/Correo/);
+ const firstBio=c.document.querySelector('.rodrigo-new').firstElementChild;
+ assert.ok(firstBio.matches('figure'),'preserva fotografía antes de biografía');
+});

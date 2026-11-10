@@ -138,7 +138,9 @@ input[type=file]{max-width:100%;min-width:0}
 </style>
 </head>
 <body>
-<div id="app"><div class="login-wrap"><div class="card login-card"><p class="muted">Cargando…</p></div></div></div>
-<script src="app.js" defer></script>
+<div id="app"><div class="login-wrap"><div class="card login-card" data-boot><p class="muted">Cargando…</p></div></div></div>
+<noscript><div class="login-wrap"><div class="card login-card"><div class="alert error" role="alert">El panel necesita JavaScript habilitado para funcionar.</div></div></div></noscript>
+<script src="/admin/guard.js" defer></script>
+<script src="/admin/app.js" defer></script>
 </body>
 </html>

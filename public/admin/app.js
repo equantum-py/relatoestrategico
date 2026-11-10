@@ -1109,4 +1109,8 @@ async function boot() {
     showLogin(err.status === 401 ? "" : err.message);
   }
 }
-boot();
+boot().catch((err) => {
+  const root = document.getElementById("app");
+  if (root) root.innerHTML = alertBox("No se pudo iniciar el panel. Recarga la página e intenta nuevamente.");
+  console.error("[admin] Error de arranque:", err);
+});

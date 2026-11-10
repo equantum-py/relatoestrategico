@@ -5,7 +5,11 @@
    aquí solo se ocultan o deshabilitan controles para cada rol. */
 
 /* ---------- Configuración ---------- */
-const API = "https://api.relatoestrategico.cl";
+// En Preview, Vercel reenvía la API por el mismo origen para evitar bloqueos CORS/WAF del navegador.
+// Producción conserva la conexión directa sin cambios.
+const API = location.hostname === "preview.relatoestrategico.cl"
+  ? "/admin-api"
+  : "https://api.relatoestrategico.cl";
 const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
 const MAX_RESTORE_BYTES = 10 * 1024 * 1024;
 const ROLE_LABEL = { admin: "Administrador", editor: "Editor", reader: "Lector" };

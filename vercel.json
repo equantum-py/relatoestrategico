@@ -55,5 +55,11 @@
     "deploymentEnabled": {
       "integration/frontend-php-api": false
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/admin-api/:path*",
+      "destination": "https://api.relatoestrategico.cl/:path*"
+    }
+  ]
 }

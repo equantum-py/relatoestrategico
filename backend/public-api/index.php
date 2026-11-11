@@ -26,6 +26,7 @@ const PAGE_KEY = '([a-z][a-z0-9-]{1,39})';
 const ID = '(\d{1,10})';
 
 $routes = [
+    ['GET',    '#^/v1/public/featured$#',              static fn () => Content::publicFeatured()],
     ['GET',    '#^/v1/health$#',                       static fn () => Http::ok(['status' => 'up'])],
     ['GET',    '#^/v1/auth/csrf$#',                    static fn () => Auth::csrf()],
     ['POST',   '#^/v1/auth/login$#',                   static fn () => Auth::login(Http::body())],

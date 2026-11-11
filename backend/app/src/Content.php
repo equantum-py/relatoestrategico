@@ -29,7 +29,27 @@ final class Content
     public const ROLES_WRITE_POSTS = ['admin', 'editor'];
     public const ROLES_WRITE_SETTINGS = ['admin'];
 
-    public static function listPosts(array $query): void
+    /** Destacado único persistido en site_settings; no requiere migración. */
+    private static function featuredSlug(): string
+    {
+        $st = Db::pdo()->prepare("SELECT setting_value FROM site_settings WHERE setting_key = 'featuredPostSlug' LIMIT 1");
+        $st->execute();
+        return (string) ($st->fetchColumn() ?: '');
+    }
+
+    private static function markFeatured(array $post): array
+    {
+        $post['featured'] = $post['status'] === 'publicado' && $post['slug'] === self::featuredSlug();
+        return $post;
+    }
+
+    private static function saveFeatured(string $slug, int $uid): void
+    {
+        $st = Db::pdo()->prepare("INSERT INTO site_settings (setting_key, setting_value, updated_at, updated_by) VALUES ('featuredPostSlug', ?, ?, ?) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value), updated_at = VALUES(updated_at), updated_by = VALUES(updated_by)");
+        $st->execute([$slug, Db::now(), $uid]);
+    }
+
+        public static function listPosts(array $query): void
     {
         Session::authorize(self::ROLES_READ);
 
@@ -60,13 +80,13 @@ final class Content
 
         $st = Db::pdo()->prepare($sql);
         $st->execute($params);
-        Http::ok(['posts' => array_map([self::class, 'castPost'], $st->fetchAll())]);
+        Http::ok(['posts' => array_map([self::class, 'markFeatured'], array_map([self::class, 'castPost'], $st->fetchAll()))]);
     }
 
     public static function getPost(int $id): void
     {
         Session::authorize(self::ROLES_READ);
-        Http::ok(['post' => self::postOrFail($id)]);
+        Http::ok(['post' => self::markFeatured(self::postOrFail($id))]);
     }
 
     public static function createPost(array $in): void
@@ -96,6 +116,7 @@ final class Content
         }
 
         $id = (int) $pdo->lastInsertId();
+        if (($in['featured'] ?? false) === true && $data['status'] === 'publicado') self::saveFeatured($data['slug'], $uid);
         Security::logEvent('post_created', $uid, 'post:' . $id);
         Http::ok(['post' => self::postOrFail($id)], 201);
     }
@@ -128,6 +149,12 @@ final class Content
             throw $e;
         }
 
+        $wasFeatured = $current['slug'] === self::featuredSlug();
+        if (($in['featured'] ?? false) === true && $data['status'] === 'publicado') {
+            self::saveFeatured($data['slug'], $session['user']['id']);
+        } elseif ($wasFeatured) {
+            self::saveFeatured('', $session['user']['id']);
+        }
         Security::logEvent('post_updated', $session['user']['id'], 'post:' . $id);
         Http::ok(['post' => self::postOrFail($id)]);
     }
@@ -135,7 +162,8 @@ final class Content
     public static function deletePost(int $id): void
     {
         $session = Session::authorize(self::ROLES_WRITE_POSTS);
-        self::postOrFail($id);
+        $post = self::postOrFail($id);
+        if ($post['slug'] === self::featuredSlug()) self::saveFeatured('', $session['user']['id']);
         Db::pdo()->prepare('DELETE FROM posts WHERE id = ?')->execute([$id]);
         Security::logEvent('post_deleted', $session['user']['id'], 'post:' . $id);
         Http::ok();

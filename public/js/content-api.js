@@ -52,7 +52,7 @@ window.RelatoContent = (() => {
   }
   // Cambiar a "api" solo después de verificar la carga aprobada y autorizar el corte.
   // Es una decisión de esta versión, no depende de red, cantidad de posts ni caché.
-  const publicationSource = "approved-static";
+  const publicationSource = "api";
   async function usePublicAPI() { return publicationSource === "api"; }
   async function posts() {
     const result = []; let offset = 0;

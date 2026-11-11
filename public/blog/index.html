@@ -45,6 +45,8 @@ body>footer>div,body>footer>span{color:inherit!important;opacity:1!important}
 .site-global-footer .site-footer-bottom{display:flex;justify-content:space-between;gap:14px;border-top:1px solid #425468;margin-top:40px;padding-top:19px;font-size:12px;color:#b6c6d2}
 .site-global-footer .site-footer-bottom a{color:#e8edf2!important}
 @media(max-width:700px){.site-global-footer .site-footer-inner{width:calc(100% - 36px);padding:35px 0 90px}.site-global-footer .site-footer-top{grid-template-columns:1fr 1fr;gap:30px 18px}.site-global-footer .site-footer-about{grid-column:1/-1}.site-global-footer .site-footer-column a,.site-global-footer .site-footer-column span{font-size:12px}.site-global-footer .site-footer-bottom{flex-direction:column;margin-top:30px}}
+/* Separación editorial antes del pie de página, sin alterar tarjetas. */
+.shell > main#app{padding-bottom:clamp(64px,8vw,112px)!important}
 /* El footer está dentro de .shell, no es hijo directo de body. */
 .shell:has(> footer.site-global-footer){padding-bottom:0!important}
 .site-global-footer .site-footer-inner,.site-global-footer .site-footer-about,.site-global-footer .site-footer-column,.site-global-footer .site-footer-bottom{opacity:1!important;visibility:visible!important}

@@ -740,10 +740,6 @@ async function renderPostEditor(root) {
             </select>
           </label>
         </div>
-        <label class="field" style="display:flex;align-items:center;gap:12px;padding:14px;border:1px solid #d7e3ed;border-radius:10px;margin:12px 0">
-          <input type="checkbox" name="featured" value="1" ${post.featured ? "checked" : ""} ${dis} style="width:18px;height:18px">
-          <span><strong>Destacar como artículo principal</strong><small class="hint" style="display:block">Aparecerá primero y en tamaño grande en el blog. Solo para artículos publicados; sustituye al destacado anterior.</small></span>
-        </label>
         ${area("Extracto", "excerpt", post.excerpt, `maxlength="500" ${dis}`)}
         ${area("Contenido", "body", post.body, `maxlength="50000" ${dis}`, "tall")}
         <div class="field">
@@ -848,7 +844,7 @@ async function renderPostEditor(root) {
     const x = Object.fromEntries(new FormData(form));
     const payload = {
       title: x.title.trim(), slug: x.slug.trim(), category: x.category.trim(), excerpt: x.excerpt.trim(),
-      body: x.body, image_url: x.image_url.trim(), status: x.status, featured: x.featured === "1",
+      body: x.body, image_url: x.image_url.trim(), status: x.status,
     };
     if (payload.title.length < 3) { $("#post-msg", root).innerHTML = alertBox("El título debe tener al menos 3 caracteres."); return; }
     if (payload.image_url && !isSafeLink(payload.image_url)) {

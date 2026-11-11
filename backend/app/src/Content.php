@@ -29,6 +29,17 @@ final class Content
     public const ROLES_WRITE_POSTS = ['admin', 'editor'];
     public const ROLES_WRITE_SETTINGS = ['admin'];
 
+    public static function publicFeatured(): void
+    {
+        $slug = self::featuredSlug();
+        if ($slug !== '') {
+            $st = Db::pdo()->prepare("SELECT id FROM posts WHERE slug = ? AND status = 'publicado' LIMIT 1");
+            $st->execute([$slug]);
+            if ($st->fetchColumn() === false) $slug = '';
+        }
+        Http::ok(['slug' => $slug]);
+    }
+
     /** Destacado único persistido en site_settings; no requiere migración. */
     private static function featuredSlug(): string
     {

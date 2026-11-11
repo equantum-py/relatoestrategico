@@ -48,19 +48,36 @@ final class Content
         return (string) ($st->fetchColumn() ?: '');
     }
 
-    private static function markFeatured(array $post): array
+    /** Marca `featured` solo si el artículo está publicado y es el destacado actual. */
+    private static function markFeatured(array $post, string $featuredSlug): array
     {
-        $post['featured'] = $post['status'] === 'publicado' && $post['slug'] === self::featuredSlug();
+        $post['featured'] = $post['status'] === 'publicado' && $post['slug'] === $featuredSlug;
         return $post;
     }
 
+    /** Un único destacado: escribir un slug nuevo reemplaza al anterior; '' lo quita. */
     private static function saveFeatured(string $slug, int $uid): void
     {
         $st = Db::pdo()->prepare("INSERT INTO site_settings (setting_key, setting_value, updated_at, updated_by) VALUES ('featuredPostSlug', ?, ?, ?) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value), updated_at = VALUES(updated_at), updated_by = VALUES(updated_by)");
         $st->execute([$slug, Db::now(), $uid]);
     }
 
-        public static function listPosts(array $query): void
+    /**
+     * Lee el campo opcional `featured` del cuerpo. Ausente => null (conservar la selección actual).
+     * Cualquier valor que no sea booleano se rechaza para evitar cambios accidentales.
+     */
+    private static function featuredFlag(array $in): ?bool
+    {
+        if (!array_key_exists('featured', $in)) {
+            return null;
+        }
+        if (!is_bool($in['featured'])) {
+            Http::fail(422, 'validation', 'El campo destacado debe ser verdadero o falso.');
+        }
+        return $in['featured'];
+    }
+
+    public static function listPosts(array $query): void
     {
         Session::authorize(self::ROLES_READ);
 
@@ -91,19 +108,27 @@ final class Content
 
         $st = Db::pdo()->prepare($sql);
         $st->execute($params);
-        Http::ok(['posts' => array_map([self::class, 'markFeatured'], array_map([self::class, 'castPost'], $st->fetchAll()))]);
+        $featuredSlug = self::featuredSlug();
+        $posts = array_map(
+            static fn (array $row): array => self::markFeatured(self::castPost($row), $featuredSlug),
+            $st->fetchAll()
+        );
+        Http::ok(['posts' => $posts]);
     }
 
     public static function getPost(int $id): void
     {
         Session::authorize(self::ROLES_READ);
-        Http::ok(['post' => self::markFeatured(self::postOrFail($id))]);
+        Http::ok(['post' => self::postWithFeatured($id)]);
     }
 
     public static function createPost(array $in): void
     {
         $session = Session::authorize(self::ROLES_WRITE_POSTS);
         $data = self::cleanPost($in, 0);
+        if (self::featuredFlag($in) === true) {
+            self::requirePublishedForFeatured($data['status']); // validar antes de escribir
+        }
         $now = Db::now();
         $uid = $session['user']['id'];
 
@@ -127,9 +152,11 @@ final class Content
         }
 
         $id = (int) $pdo->lastInsertId();
-        if (($in['featured'] ?? false) === true && $data['status'] === 'publicado') self::saveFeatured($data['slug'], $uid);
+        if (self::featuredFlag($in) === true) {
+            self::saveFeatured($data['slug'], $uid);
+        }
         Security::logEvent('post_created', $uid, 'post:' . $id);
-        Http::ok(['post' => self::postOrFail($id)], 201);
+        Http::ok(['post' => self::postWithFeatured($id)], 201);
     }
 
     public static function updatePost(int $id, array $in): void
@@ -137,6 +164,9 @@ final class Content
         $session = Session::authorize(self::ROLES_WRITE_POSTS);
         $current = self::postOrFail($id);
         $data = self::cleanPost($in, $id);
+        if (self::featuredFlag($in) === true) {
+            self::requirePublishedForFeatured($data['status']); // validar antes de escribir
+        }
         $now = Db::now();
 
         $publishedAt = $current['published_at'];
@@ -161,13 +191,15 @@ final class Content
         }
 
         $wasFeatured = $current['slug'] === self::featuredSlug();
-        if (($in['featured'] ?? false) === true && $data['status'] === 'publicado') {
+        $wantsFeatured = self::featuredFlag($in) ?? $wasFeatured; // sin campo `featured`, se conserva la selección
+        if ($wantsFeatured && $data['status'] === 'publicado') {
             self::saveFeatured($data['slug'], $session['user']['id']);
         } elseif ($wasFeatured) {
+            // Quitado a propósito, despublicado o eliminado de la selección: se limpia.
             self::saveFeatured('', $session['user']['id']);
         }
         Security::logEvent('post_updated', $session['user']['id'], 'post:' . $id);
-        Http::ok(['post' => self::postOrFail($id)]);
+        Http::ok(['post' => self::postWithFeatured($id)]);
     }
 
     public static function deletePost(int $id): void
@@ -315,6 +347,19 @@ final class Content
             Http::fail(404, 'not_found', 'El artículo no existe.');
         }
         return self::castPost($row);
+    }
+
+    /** Artículo con la propiedad `featured` calculada, para respuestas administrativas. */
+    private static function postWithFeatured(int $id): array
+    {
+        return self::markFeatured(self::postOrFail($id), self::featuredSlug());
+    }
+
+    private static function requirePublishedForFeatured(string $status): void
+    {
+        if ($status !== 'publicado') {
+            Http::fail(422, 'validation', 'Solo se pueden destacar artículos publicados.');
+        }
     }
 
     private static function castPost(array $row): array

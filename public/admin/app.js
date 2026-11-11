@@ -11,6 +11,7 @@ const API = location.hostname === "preview.relatoestrategico.cl"
   ? "/admin-api"
   : "https://api.relatoestrategico.cl";
 const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
+const MAX_COVER_SOURCE_BYTES = 20 * 1024 * 1024;
 const MAX_RESTORE_BYTES = 10 * 1024 * 1024;
 const ROLE_LABEL = { admin: "Administrador", editor: "Editor", reader: "Lector" };
 const STATUS_LABEL = { borrador: "Borrador", publicado: "Publicado" };
@@ -679,6 +680,30 @@ async function renderPosts(root) {
   if (newBtn) newBtn.onclick = () => go("post", "new");
 }
 
+/* Prepara portadas originales de hasta 20 MB para el límite actual de 5 MB del servidor. */
+async function optimizeCover(file) {
+  if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) throw new Error("Usa una imagen JPG, PNG o WebP.");
+  if (!file.size || file.size > MAX_COVER_SOURCE_BYTES) throw new Error("La imagen debe pesar como máximo 20 MB.");
+  const bitmap = await createImageBitmap(file);
+  try {
+    if (bitmap.width * bitmap.height > 80000000) throw new Error("La imagen tiene demasiados píxeles.");
+    const scale = Math.min(1, 1920 / Math.max(bitmap.width, bitmap.height));
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+    canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("Este navegador no puede procesar la imagen.");
+    ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    for (const quality of [0.85, 0.72, 0.55, 0.4]) {
+      const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/webp", quality));
+      if (blob && blob.size <= MAX_UPLOAD_BYTES) return new File([blob], "portada.webp", { type: "image/webp" });
+    }
+    throw new Error("No se pudo optimizar la imagen a menos de 5 MB. Selecciona otra.");
+  } finally {
+    bitmap.close();
+  }
+}
+
 async function renderPostEditor(root) {
   const isNew = state.postId === "new";
   const writable = canWrite();
@@ -717,9 +742,15 @@ async function renderPostEditor(root) {
         </div>
         ${area("Extracto", "excerpt", post.excerpt, `maxlength="500" ${dis}`)}
         ${area("Contenido", "body", post.body, `maxlength="50000" ${dis}`, "tall")}
-        <label class="field"><span>Imagen de portada</span>
-          <input name="image_url" maxlength="500" value="${esc(post.image_url)}" placeholder="https://… o /ruta-interna.webp" ${dis}>
-        </label>
+        <div class="field">
+          <span>Imagen de portada</span>
+          <input name="image_url" type="hidden" value="${esc(post.image_url)}">
+          <input id="cover-file" type="file" accept="image/jpeg,image/png,image/webp" ${dis} aria-label="Adjuntar imagen de portada">
+          <small class="hint">JPG, PNG o WebP · máximo 20 MB. La imagen se optimiza al subirla y se adapta a desktop y mobile sin deformarse. Recomendado: 1200 × 675 px (16:9).</small>
+          <div id="cover-message" role="status" aria-live="polite"></div>
+          <div id="cover-current" style="margin-top:10px"></div>
+          ${writable ? '<button type="button" class="btn secondary small" id="cover-remove" style="margin-top:10px">Quitar portada</button>' : ""}
+        </div>
         ${writable ? `<div class="form-actions">
           <button class="btn" id="save" type="submit">Guardar artículo</button>
           ${isNew ? "" : '<button class="btn danger" id="delete" type="button">Eliminar</button>'}
@@ -733,6 +764,52 @@ async function renderPostEditor(root) {
     </div>`;
 
   const form = $("#post-form", root);
+  const coverInput = $("#cover-file", root);
+  const coverURL = form.elements.namedItem("image_url");
+  const coverCurrent = $("#cover-current", root);
+  const coverMessage = $("#cover-message", root);
+  const refreshCover = () => {
+    coverCurrent.replaceChildren();
+    const url = adminImageURL(coverURL.value);
+    if (url) {
+      const img = document.createElement("img");
+      img.src = url;
+      img.alt = "Portada actual";
+      img.style.cssText = "width:100%;max-width:360px;aspect-ratio:16/9;object-fit:cover;border-radius:12px";
+      coverCurrent.appendChild(img);
+    }
+  };
+  refreshCover();
+  if (coverInput) coverInput.onchange = async () => {
+    const file = coverInput.files?.[0];
+    if (!file) return;
+    coverMessage.textContent = "Optimizando y subiendo imagen…";
+    coverInput.disabled = true;
+    try {
+      const prepared = await optimizeCover(file);
+      const fd = new FormData();
+      fd.append("file", prepared, prepared.name);
+      const result = await api("POST", "/v1/media", fd);
+      const url = result.media?.url;
+      if (!url || !isSafeLink(url)) throw new Error("El servidor no devolvió una dirección de imagen válida.");
+      coverURL.value = url;
+      coverMessage.textContent = "Imagen subida. Guarda el artículo para asociarla a la portada.";
+      refreshCover();
+      form.dispatchEvent(new Event("input", { bubbles: true }));
+    } catch (err) {
+      coverMessage.textContent = err.message || "No se pudo subir la imagen.";
+    } finally {
+      coverInput.disabled = false;
+      coverInput.value = "";
+    }
+  };
+  const removeCover = $("#cover-remove", root);
+  if (removeCover) removeCover.onclick = () => {
+    coverURL.value = "";
+    coverMessage.textContent = "Portada quitada del formulario. Guarda el artículo para confirmar.";
+    refreshCover();
+    form.dispatchEvent(new Event("input", { bubbles: true }));
+  };
   const renderPreview = () => {
     const x = Object.fromEntries(new FormData(form));
     const box = $("#preview", root);

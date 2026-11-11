@@ -32,7 +32,7 @@ body>footer>div,body>footer>span{color:inherit!important;opacity:1!important}
 @media(max-width:700px){body>footer,body>footer.footer{flex-direction:column;align-items:flex-start;gap:10px;padding:22px 20px 95px!important;font-size:12px!important}}
 </style><style id="site-global-footer-styles">
 /* Footer de navegación completo en todas las páginas */
-body > footer.site-global-footer{display:block!important;position:relative!important;visibility:visible!important;opacity:1!important;height:auto!important;min-height:0!important;overflow:visible!important;width:100%!important;max-width:none!important;clear:both!important;margin:0!important;padding:0!important;background:#102438!important;color:#e8edf2!important;flex:none!important;box-sizing:border-box!important;z-index:2!important;font-family:'DM Sans',Arial,sans-serif!important;text-align:left!important}
+.shell > footer.site-global-footer{display:block!important;position:relative!important;visibility:visible!important;opacity:1!important;height:auto!important;min-height:0!important;overflow:visible!important;width:100vw!important;max-width:none!important;clear:both!important;margin:0 0 0 calc(50% - 50vw)!important;padding:0!important;background:#102438!important;color:#e8edf2!important;flex:none!important;box-sizing:border-box!important;z-index:2!important;font-family:'DM Sans',Arial,sans-serif!important;text-align:left!important}
 .site-global-footer .site-footer-inner{width:min(100% - 48px,1280px);margin:0 auto;padding:54px 0 22px}
 .site-global-footer .site-footer-top{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(140px,.65fr) minmax(210px,1fr);gap:clamp(28px,5vw,80px)}
 .site-global-footer .site-footer-home{font-family:'Newsreader',Georgia,serif;font-size:clamp(28px,3vw,40px);line-height:1.1;font-weight:500;color:#fff!important;text-decoration:none!important}
@@ -45,6 +45,11 @@ body > footer.site-global-footer{display:block!important;position:relative!impor
 .site-global-footer .site-footer-bottom{display:flex;justify-content:space-between;gap:14px;border-top:1px solid #425468;margin-top:40px;padding-top:19px;font-size:12px;color:#b6c6d2}
 .site-global-footer .site-footer-bottom a{color:#e8edf2!important}
 @media(max-width:700px){.site-global-footer .site-footer-inner{width:calc(100% - 36px);padding:35px 0 90px}.site-global-footer .site-footer-top{grid-template-columns:1fr 1fr;gap:30px 18px}.site-global-footer .site-footer-about{grid-column:1/-1}.site-global-footer .site-footer-column a,.site-global-footer .site-footer-column span{font-size:12px}.site-global-footer .site-footer-bottom{flex-direction:column;margin-top:30px}}
+/* El footer está dentro de .shell, no es hijo directo de body. */
+.shell:has(> footer.site-global-footer){padding-bottom:0!important}
+.site-global-footer .site-footer-inner,.site-global-footer .site-footer-about,.site-global-footer .site-footer-column,.site-global-footer .site-footer-bottom{opacity:1!important;visibility:visible!important}
+.site-global-footer .site-footer-column h2,.site-global-footer .site-footer-home{color:#fff!important}
+.site-global-footer .site-footer-about p,.site-global-footer .site-footer-column a,.site-global-footer .site-footer-column span,.site-global-footer .site-footer-bottom{color:#d4e0e9!important}
 </style><style id="active-page-navigation">
 /* Enlace de la página actual en el menú desktop y mobile */
 .nav .links a[aria-current="page"],.nav .mobile-links a[aria-current="page"]{color:#0874bf!important;text-decoration:underline!important;text-decoration-color:#0874bf!important;text-decoration-thickness:2px!important;text-underline-offset:7px!important;font-weight:700!important}

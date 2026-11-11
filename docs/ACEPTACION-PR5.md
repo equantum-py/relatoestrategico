@@ -1,3 +1,33 @@
+# Actualización de precorte — 11/11/2026
+
+> Esta sección prevalece sobre los hallazgos históricos inferiores cuando ya fueron resueltos. No autoriza fusión ni despliegue.
+
+## Hechos verificados
+
+- La candidata está en `integration/frontend-php-api` y la PR #5 sigue abierta. El preview Vercel correspondiente al commit `78f164b` está READY; GitHub reporta el estado Vercel SUCCESS, pero no se localizaron ejecuciones GitHub Actions de ese commit.
+- Dirección confirmó desde el panel conectado que crear, editar y publicar actualiza el blog, los borradores no aparecen públicamente y los cambios persisten. Los seis artículos importados permanecen como borradores. No repetir la importación.
+- `www.relatoestrategico.cl/admin/` todavía muestra el prototipo DEMO con autenticación simulada. No ingresar contraseñas reales allí.
+- `public/admin/app.js` usa `GET /v1/auth/me` para determinar la sesión y envía `X-CSRF-Token` al escribir. El backend de referencia `backend/app/src/Session.php` requiere sesión y rol y devuelve 401/403; `Auth.php` comprueba hash de contraseña y limita intentos. **Inspección de código, no prueba HTTP autenticada del backend desplegado**.
+- `backend/app/src/Media.php` re-codifica JPG/PNG/WebP, valida tipo, dimensiones, tamaño, rol y CSRF. Devuelve URL `https://api.relatoestrategico.cl/media/<nombre-aleatorio>`; `backend/public-api/media/.htaccess` permite GET público únicamente para nombres hexadecimales de 32 caracteres y extensiones de imagen, prohíbe ejecución y listado. **El diseño sí contempla portadas públicas; falta verificar Apache efectivo, publicación y visualización sin sesión**.
+- El frontend acepta fuente de hasta 20 MB y optimiza a WebP de hasta 5 MB antes de enviar. El backend mantiene límite de 5 MB. Prueba real de carga diferida por decisión de Dirección hasta después del lanzamiento; ese riesgo permanece explícito.
+- `vercel.json` desactiva despliegue automático de la rama de integración; `main` es el destino de producción. No se cambió configuración ni dominios.
+
+## Puertas obligatorias antes de GO productivo
+
+1. **Backend real:** comprobar mediante solicitudes sin cookies que `GET /v1/auth/me`, `GET /v1/posts`, `GET /v1/media`, `GET /v1/users` y `GET /v1/backup` devuelven 401. Comprobar que operaciones de escritura sin origen/CSRF son rechazadas. Nunca usar contraseñas en logs ni capturas.
+2. **Origen y cookies:** comprobar en navegador autenticado que el origen `https://www.relatoestrategico.cl` es permitido por la API; verificar `Secure`, `HttpOnly`, `SameSite=Strict` y ausencia de `Domain` en `__Host-rs_session`. Confirmar acceso por `www` y redirección del dominio sin `www` para evitar sesiones/orígenes inconsistentes.
+3. **Permisos:** comprobar con cuentas autorizadas que lector no puede escribir, editor no puede administrar usuarios ni restaurar y admin puede operar. No crear cuentas de prueba en producción.
+4. **Medios públicos:** confirmar que el servidor Apache utiliza las reglas de `.htaccess`, rechaza archivos ajenos y ejecución, y que una imagen publicada tiene URL HTTPS accesible sin sesión. Evitar probar con datos privados. La carga de una portada nueva después del lanzamiento será una prueba de aceptación poscorte, con plan de reversión.
+5. **Recuperación:** confirmar respaldo reciente y restaurable de MariaDB, código PHP y directorio de medios, sin exportar secretos. Confirmar 7 páginas y 39 identidades de bloques; preservar el artículo publicado y los seis borradores.
+6. **CI/PR:** ejecutar pruebas automatizadas del HEAD final y revisar diff completo de PR #5. Un deploy Vercel READY no sustituye pruebas.
+7. **Corte:** solo tras GO explícito, fusionar PR #5 en `main`, verificar Vercel READY y probar web pública, `/admin/` con login real y blog. Confirmar que desaparece la demo. Si falla el acceso o contenido, detener y revertir al despliegue anterior; no restaurar base productiva salvo procedimiento de recuperación aprobado.
+
+## Estado de decisión
+
+**NO GO condicionado.** La revisión estática de sesión y medios no reveló necesidad de rediseñar el backend; faltan pruebas contra el servidor efectivamente desplegado, comprobación de reglas Apache y ejecución de CI. Sin fusión, despliegue, cambios de BD ni credenciales.
+
+---
+
 # PR #5 — Informe de aceptación técnica
 
 > Informe vigente: [VALIDACION-INTEGRADA-PR5.md](VALIDACION-INTEGRADA-PR5.md). El contenido inferior conserva el estado de la revisión anterior.

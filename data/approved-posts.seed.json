@@ -1,0 +1,63 @@
+{
+  "format": "relato-approved-posts-seed",
+  "source_commit": "e4172ce",
+  "source_path": "public/blog/index.html",
+  "content_kind": "existing-editorial-summaries",
+  "publication": "prepare-only; validate drafts in isolated MariaDB before approved cutover",
+  "posts": [
+    {
+      "title": "¿Por qué la consultoría de marca personal se ha convertido en una herramienta estratégica para profesionales y ejecutivos?",
+      "slug": "consultoria-marca-personal",
+      "category": "Consultoría de marca personal",
+      "excerpt": "La importancia de una consultoría de marca personal en LinkedIn como apoyo estratégico en el posicionamiento de profesionales, gerentes y líderes que quieren destacar en su sector.",
+      "body": "",
+      "image_url": "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1200&q=82",
+      "status": "borrador"
+    },
+    {
+      "title": "¿Cómo es la presencia de los gremios chilenos y sus líderes en LinkedIn?",
+      "slug": "gremios-chilenos-linkedin",
+      "category": "Posicionamiento en LinkedIn",
+      "excerpt": "Los gremios empresariales ya tienen presencia en LinkedIn, pero sus líderes aún tienen una gran oportunidad de fortalecer su visibilidad digital.",
+      "body": "",
+      "image_url": "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1000&q=80",
+      "status": "borrador"
+    },
+    {
+      "title": "LinkedIn anuncia los posts colaborativos: ¿qué oportunidades ofrece la nueva funcionalidad?",
+      "slug": "posts-colaborativos",
+      "category": "LinkedIn",
+      "excerpt": "Las nuevas oportunidades y potencialidades que aparecen con los posts colaborativos en LinkedIn.",
+      "body": "",
+      "image_url": "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1000&q=80",
+      "status": "borrador"
+    },
+    {
+      "title": "LinkedIn: Executive Branding vs Personal Branding",
+      "slug": "executive-branding",
+      "category": "Estrategia",
+      "excerpt": "Las diferencias clave entre marca personal y executive branding, y cómo una estrategia se adapta al posicionamiento profesional.",
+      "body": "",
+      "image_url": "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=1000&q=80",
+      "status": "borrador"
+    },
+    {
+      "title": "LinkedIn convierte a tus colaboradores en «embajadores digitales»",
+      "slug": "embajadores-digitales",
+      "category": "Empresas",
+      "excerpt": "Cómo transformar a los colaboradores de tu empresa en embajadores de marca digital que amplifiquen el alcance y la credibilidad de tu organización.",
+      "body": "",
+      "image_url": "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1000&q=80",
+      "status": "borrador"
+    },
+    {
+      "title": "¿Cómo optimizar tu perfil de LinkedIn?",
+      "slug": "optimizar-perfil",
+      "category": "LinkedIn",
+      "excerpt": "Guía completa paso a paso para transformar tu perfil de LinkedIn en una herramienta de atracción de oportunidades profesionales.",
+      "body": "",
+      "image_url": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=80",
+      "status": "borrador"
+    }
+  ]
+}

@@ -1,0 +1,157 @@
+{
+  "reference_commit": "e4172ce",
+  "scope": "frontend corrective validation only; no backend production changes",
+  "targeted_unit_tests": {
+    "passed": 11,
+    "unaffected_tests_rerun": false
+  },
+  "browser": {
+    "scope": "isolated frontend fixtures only; proposed stable backend contract; no SQL/login/production writes",
+    "passed": 18,
+    "results": [
+      {
+        "name": "static-approved-six-exact-summaries",
+        "width": 390,
+        "result": "PASS"
+      },
+      {
+        "name": "home-preserved-before-cutover",
+        "width": 390,
+        "result": "PASS"
+      },
+      {
+        "name": "legacy-contract-keeps-approved-design",
+        "width": 390,
+        "result": "PASS"
+      },
+      {
+        "name": "semantic-key-survives-new-and-reused-ids",
+        "width": 390,
+        "result": "PASS"
+      },
+      {
+        "name": "api-seed-six-summaries-after-cutover",
+        "width": 390,
+        "result": "PASS"
+      },
+      {
+        "name": "seed-summary-does-not-invent-body",
+        "width": 390,
+        "result": "PASS"
+      },
+      {
+        "name": "api-empty-is-authoritative-after-cutover",
+        "width": 390,
+        "result": "PASS"
+      },
+      {
+        "name": "withdrawn-post-does-not-resurrect",
+        "width": 390,
+        "result": "PASS"
+      },
+      {
+        "name": "api-outage-does-not-resurrect-static-posts",
+        "width": 390,
+        "result": "PASS"
+      },
+      {
+        "name": "static-approved-six-exact-summaries",
+        "width": 1440,
+        "result": "PASS"
+      },
+      {
+        "name": "home-preserved-before-cutover",
+        "width": 1440,
+        "result": "PASS"
+      },
+      {
+        "name": "legacy-contract-keeps-approved-design",
+        "width": 1440,
+        "result": "PASS"
+      },
+      {
+        "name": "semantic-key-survives-new-and-reused-ids",
+        "width": 1440,
+        "result": "PASS"
+      },
+      {
+        "name": "api-seed-six-summaries-after-cutover",
+        "width": 1440,
+        "result": "PASS"
+      },
+      {
+        "name": "seed-summary-does-not-invent-body",
+        "width": 1440,
+        "result": "PASS"
+      },
+      {
+        "name": "api-empty-is-authoritative-after-cutover",
+        "width": 1440,
+        "result": "PASS"
+      },
+      {
+        "name": "withdrawn-post-does-not-resurrect",
+        "width": 1440,
+        "result": "PASS"
+      },
+      {
+        "name": "api-outage-does-not-resurrect-static-posts",
+        "width": 1440,
+        "result": "PASS"
+      }
+    ],
+    "consoleErrors": 0
+  },
+  "stable_contract_real_probe": {
+    "method": "GET",
+    "path": "/v1/public/pages/home",
+    "http": 200,
+    "blocks": 7,
+    "identity_schema": null,
+    "block_key_present": false
+  },
+  "approved_seed": {
+    "posts": 6,
+    "status": "borrador",
+    "body_source": "no complete bodies in existing repository; preserved summaries",
+    "import_executed": false
+  },
+  "real_login_executed": false,
+  "mariadb_writes_executed": false,
+  "sql_restore_executed": false,
+  "production_content_mutated": false,
+  "verdict": "NO GO integration pending deployed PHP contract and isolated validation",
+  "image_head": [
+    {
+      "slug": "consultoria-marca-personal",
+      "http": 200,
+      "content_type": "image/jpeg",
+      "evidence": "HEAD completed earlier in this validation"
+    },
+    {
+      "slug": "gremios-chilenos-linkedin",
+      "http": 200,
+      "content_type": "image/jpeg"
+    },
+    {
+      "slug": "posts-colaborativos",
+      "http": 200,
+      "content_type": "image/jpeg"
+    },
+    {
+      "slug": "executive-branding",
+      "http": 200,
+      "content_type": "image/jpeg"
+    },
+    {
+      "slug": "embajadores-digitales",
+      "http": 200,
+      "content_type": "image/jpeg"
+    },
+    {
+      "slug": "optimizar-perfil",
+      "http": 200,
+      "content_type": "image/jpeg"
+    }
+  ]
+}

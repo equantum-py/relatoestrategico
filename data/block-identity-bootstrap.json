@@ -1,0 +1,243 @@
+{
+  "schema": "relato.block-key.v1",
+  "status": "verified-against-supplied-PHP-archive-not-production",
+  "reference_commit": "e4172ce",
+  "note": "IDs y títulos solo son precondiciones de migración única; nunca identidad de runtime. No ejecutar en producción.",
+  "bindings": [
+    {
+      "block_key": "home.hero",
+      "page_key": "home",
+      "bootstrap_observed_id": 1,
+      "bootstrap_expected_title": "Hero: Tu experiencia tiene valor"
+    },
+    {
+      "block_key": "home.solutions",
+      "page_key": "home",
+      "bootstrap_observed_id": 2,
+      "bootstrap_expected_title": "Soluciones según objetivo"
+    },
+    {
+      "block_key": "home.services",
+      "page_key": "home",
+      "bootstrap_observed_id": 3,
+      "bootstrap_expected_title": "Cuatro servicios"
+    },
+    {
+      "block_key": "home.results",
+      "page_key": "home",
+      "bootstrap_observed_id": 4,
+      "bootstrap_expected_title": "Resultados destacados"
+    },
+    {
+      "block_key": "home.about",
+      "page_key": "home",
+      "bootstrap_observed_id": 5,
+      "bootstrap_expected_title": "Rodrigo Barría"
+    },
+    {
+      "block_key": "home.blog",
+      "page_key": "home",
+      "bootstrap_observed_id": 6,
+      "bootstrap_expected_title": "Noticias, tendencias y tips de LinkedIn"
+    },
+    {
+      "block_key": "home.contact",
+      "page_key": "home",
+      "bootstrap_observed_id": 7,
+      "bootstrap_expected_title": "Contacto y agenda"
+    },
+    {
+      "block_key": "preguntas.audience",
+      "page_key": "preguntas",
+      "bootstrap_observed_id": 26,
+      "bootstrap_expected_title": "¿Para quién es la asesoría de marca personal en LinkedIn?"
+    },
+    {
+      "block_key": "preguntas.self-service",
+      "page_key": "preguntas",
+      "bootstrap_observed_id": 27,
+      "bootstrap_expected_title": "¿Puedo construir mi marca personal en LinkedIn por mi cuenta?"
+    },
+    {
+      "block_key": "preguntas.pricing",
+      "page_key": "preguntas",
+      "bootstrap_observed_id": 28,
+      "bootstrap_expected_title": "¿Cuánto cuestan los servicios?"
+    },
+    {
+      "block_key": "preguntas.dedication",
+      "page_key": "preguntas",
+      "bootstrap_observed_id": 29,
+      "bootstrap_expected_title": "¿Cuánto tiempo debo dedicar si trabajan conmigo?"
+    },
+    {
+      "block_key": "preguntas.voice",
+      "page_key": "preguntas",
+      "bootstrap_observed_id": 30,
+      "bootstrap_expected_title": "¿Los contenidos serán genéricos? ¿Sonarán como yo?"
+    },
+    {
+      "block_key": "preguntas.timeframe",
+      "page_key": "preguntas",
+      "bootstrap_observed_id": 31,
+      "bootstrap_expected_title": "¿En cuánto tiempo se ven resultados?"
+    },
+    {
+      "block_key": "preguntas.followers",
+      "page_key": "preguntas",
+      "bootstrap_observed_id": 32,
+      "bootstrap_expected_title": "¿Garantizan más seguidores en LinkedIn?"
+    },
+    {
+      "block_key": "preguntas.opportunities",
+      "page_key": "preguntas",
+      "bootstrap_observed_id": 33,
+      "bootstrap_expected_title": "¿Puedo conseguir empleo o negocios gracias a LinkedIn?"
+    },
+    {
+      "block_key": "servicios.linkedin-start",
+      "page_key": "servicios",
+      "bootstrap_observed_id": 11,
+      "bootstrap_expected_title": "Perfil Estratégico"
+    },
+    {
+      "block_key": "servicios.linkedin-pro",
+      "page_key": "servicios",
+      "bootstrap_observed_id": 12,
+      "bootstrap_expected_title": "Presencia Constante"
+    },
+    {
+      "block_key": "servicios.linkedin-elite",
+      "page_key": "servicios",
+      "bootstrap_observed_id": 13,
+      "bootstrap_expected_title": "LinkedIn Elite"
+    },
+    {
+      "block_key": "servicios.workshop",
+      "page_key": "servicios",
+      "bootstrap_observed_id": 14,
+      "bootstrap_expected_title": "Taller Embajadores LinkedIn"
+    },
+    {
+      "block_key": "nosotros.biography",
+      "page_key": "nosotros",
+      "bootstrap_observed_id": 20,
+      "bootstrap_expected_title": "Rodrigo Barría, periodista senior y director editorial"
+    },
+    {
+      "block_key": "nosotros.portrait",
+      "page_key": "nosotros",
+      "bootstrap_observed_id": 21,
+      "bootstrap_expected_title": "Fotografía: /rodrigo.webp"
+    },
+    {
+      "block_key": "nosotros.ruta-review",
+      "page_key": "nosotros",
+      "bootstrap_observed_id": 22,
+      "bootstrap_expected_title": "Método RUTA: Revisar"
+    },
+    {
+      "block_key": "nosotros.ruta-unify",
+      "page_key": "nosotros",
+      "bootstrap_observed_id": 23,
+      "bootstrap_expected_title": "Método RUTA: Unificar"
+    },
+    {
+      "block_key": "nosotros.ruta-translate",
+      "page_key": "nosotros",
+      "bootstrap_observed_id": 24,
+      "bootstrap_expected_title": "Método RUTA: Traducir"
+    },
+    {
+      "block_key": "nosotros.ruta-activate",
+      "page_key": "nosotros",
+      "bootstrap_observed_id": 25,
+      "bootstrap_expected_title": "Método RUTA: Activar"
+    },
+    {
+      "block_key": "soluciones.career",
+      "page_key": "soluciones",
+      "bootstrap_observed_id": 8,
+      "bootstrap_expected_title": "Mejorar oportunidades laborales"
+    },
+    {
+      "block_key": "soluciones.business",
+      "page_key": "soluciones",
+      "bootstrap_observed_id": 9,
+      "bootstrap_expected_title": "Conseguir oportunidades de negocio"
+    },
+    {
+      "block_key": "soluciones.authority",
+      "page_key": "soluciones",
+      "bootstrap_observed_id": 10,
+      "bootstrap_expected_title": "Posicionarme como referente"
+    },
+    {
+      "block_key": "resultados.interactions",
+      "page_key": "resultados",
+      "bootstrap_observed_id": 15,
+      "bootstrap_expected_title": "Interacciones"
+    },
+    {
+      "block_key": "resultados.impressions",
+      "page_key": "resultados",
+      "bootstrap_observed_id": 16,
+      "bootstrap_expected_title": "+2.135 % impresiones"
+    },
+    {
+      "block_key": "resultados.followers",
+      "page_key": "resultados",
+      "bootstrap_observed_id": 17,
+      "bootstrap_expected_title": "+24,1 % seguidores"
+    },
+    {
+      "block_key": "resultados.recognition",
+      "page_key": "resultados",
+      "bootstrap_observed_id": 18,
+      "bootstrap_expected_title": "+57,4 % impresiones anuales"
+    },
+    {
+      "block_key": "resultados.evidence",
+      "page_key": "resultados",
+      "bootstrap_observed_id": 19,
+      "bootstrap_expected_title": "Gráficos y evidencias"
+    },
+    {
+      "block_key": "contacto.whatsapp",
+      "page_key": "contacto",
+      "bootstrap_observed_id": 34,
+      "bootstrap_expected_title": "WhatsApp: +56 9 5085 9889"
+    },
+    {
+      "block_key": "contacto.email",
+      "page_key": "contacto",
+      "bootstrap_observed_id": 35,
+      "bootstrap_expected_title": "Correo: contacto@relatoestrategico.cl"
+    },
+    {
+      "block_key": "contacto.calendar",
+      "page_key": "contacto",
+      "bootstrap_observed_id": 36,
+      "bootstrap_expected_title": "Agendamiento: Google Calendar"
+    },
+    {
+      "block_key": "contacto.linkedin",
+      "page_key": "contacto",
+      "bootstrap_observed_id": 37,
+      "bootstrap_expected_title": "LinkedIn: Rodrigo Barría Reyes"
+    },
+    {
+      "block_key": "contacto.instagram",
+      "page_key": "contacto",
+      "bootstrap_observed_id": 38,
+      "bootstrap_expected_title": "Instagram: @relatoestrategico"
+    },
+    {
+      "block_key": "contacto.location",
+      "page_key": "contacto",
+      "bootstrap_observed_id": 39,
+      "bootstrap_expected_title": "Santiago, Chile · Atención remota y presencial"
+    }
+  ],
+  "verified_backend_sha256": "85aa4113fccf1d42d8d83cc6ff7e3b38f1b5412ec861e6ce4a9dbd7b1f213d7a"
+}
